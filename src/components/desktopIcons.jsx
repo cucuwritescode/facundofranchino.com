@@ -3,7 +3,7 @@ import { GlobalStyle, ThemeProvider } from "@react95/core";
 import IconBox from "./iconBox";
 import IconText from "./iconText";
 import "./styles.scss";
-import { Awfxcg321303, Explorer103, CdMusic, Mshtml32534, Progman8 } from "@react95/icons";
+import { Awfxcg321303, Explorer103, CdMusic, Mshtml32534, Progman13 } from "@react95/icons";
 
 function Shortcuts({ openPortfolio, openCV, openTunes, openBlog, openTranscriptions }) {
   return (
@@ -27,7 +27,7 @@ function Shortcuts({ openPortfolio, openCV, openTunes, openBlog, openTranscripti
           <IconText className="pointer">Blog.exe</IconText>
         </IconBox>
         <IconBox className="pointer" onClick={() => openTranscriptions()}>
-          <Progman8 className="pointer" variant="32x32_4" />
+          <Progman13 className="pointer" variant="32x32_4" />
           <IconText className="pointer">Transcriptions</IconText>
         </IconBox>
       </ThemeProvider>

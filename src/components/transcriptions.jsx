@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { List, Frame, Button } from "@react95/core";
-import { Mshtml32534 } from "@react95/icons";
+import { Progman13 } from "@react95/icons";
 import * as S from "./layoutStyling";
 import transcriptionsData from "../data/transcriptions.json";
 
@@ -46,7 +46,7 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
         title={`${currentTranscription.title} - Transcriptions`}
         closeModal={closeTranscriptions}
         height="100%"
-        icon={<Mshtml32534 variant="32x32_4" />}
+        icon={<Progman13 variant="32x32_4" />}
         menu={[
           {
             name: "Options",
@@ -71,18 +71,6 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
             </div>
             
             <h1>{currentTranscription.title}</h1>
-            
-            <div style={{ marginBottom: '20px', color: '#666' }}>
-              <p><strong>Composer:</strong> {currentTranscription.composer}</p>
-              {currentTranscription.arranger && (
-                <p><strong>Arranger:</strong> {currentTranscription.arranger}</p>
-              )}
-              <p><strong>Transcribed:</strong> {currentTranscription.date}</p>
-              <p><strong>Instrumentation:</strong> {currentTranscription.instrumentation}</p>
-              <p><strong>Difficulty:</strong> {currentTranscription.difficulty}</p>
-              <p><strong>Key:</strong> {currentTranscription.keySignature} | <strong>Time:</strong> {currentTranscription.timeSignature} | <strong>Tempo:</strong> {currentTranscription.tempo}</p>
-              <p><strong>Pages:</strong> {currentTranscription.pages}</p>
-            </div>
 
             <div style={{ marginBottom: '20px' }}>
               <Button 
@@ -102,28 +90,6 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
                 <p>{currentTranscription.notes}</p>
               </>
             )}
-
-            {currentTranscription.tags && (
-              <div style={{ marginTop: '20px' }}>
-                <h4>Tags</h4>
-                <div>
-                  {currentTranscription.tags.map((tag, index) => (
-                    <span 
-                      key={index}
-                      style={{
-                        backgroundColor: '#c0c0c0',
-                        padding: '2px 6px',
-                        marginRight: '5px',
-                        fontSize: '12px',
-                        border: '1px solid #808080'
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
           </S.textModal>
         </S.layoutMainContent>
       </S.layoutMain>
@@ -136,7 +102,7 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
       title="Transcriptions"
       closeModal={closeTranscriptions}
       height="100%"
-      icon={<Mshtml32534 variant="32x32_4" />}
+      icon={<Progman13 variant="32x32_4" />}
       menu={[
         {
           name: "Options",
@@ -174,15 +140,6 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
               >
                 <div>
                   <strong>{transcription.title}</strong>
-                  <br />
-                  <small style={{ color: '#666' }}>
-                    {transcription.composer}
-                    {transcription.arranger && ` (arr. ${transcription.arranger})`}
-                    {' • '}
-                    {transcription.instrumentation}
-                    {' • '}
-                    {transcription.pages} pages
-                  </small>
                   <br />
                   <small style={{ color: '#888', fontStyle: 'italic' }}>
                     {transcription.description.substring(0, 100)}...

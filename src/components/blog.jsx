@@ -117,7 +117,7 @@ function Blog({ closeBlog, isMobile }) {
           {view === "list" ? (
             <div>
               <h1>Blog Posts</h1>
-              <p>Thoughts on technology, music, and engineering.</p>
+              <p>Musings on the nature of sound, machines, and their curious conversation.</p>
               <hr style={{ margin: "20px 0", border: "1px inset #c0c0c0" }} />
               
               {blogPosts

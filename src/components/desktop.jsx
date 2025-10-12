@@ -258,89 +258,67 @@ const handleCloseAlbumModal = useCallback(() => {
         >
           <S.layoutMainContent bg="white" boxShadow="in">
             <S.textModal>
+              <h1>Skills & Technologies</h1>
               <p>
-                {" "}
-                <h1>Some of my skills</h1>Here are some of my most used skills, knowledge
-                and aptitudes - Some of these skills are used on a daily basis and in a 
-                interdisciplinary manner.
-                
-                <br />
-                <hr /> 
-                
-                <h2> Engineering </h2>  <ProgressBar width={250} percent={50} />
-                <h3>Algorithms</h3>
-                <h3>Digital Signal Processing</h3>
-                <h3>Python</h3>
-                
-               
-                
-        
-                <h3>Rust</h3>
-               
-                <h3>Faust</h3>
-                <h3>Pure Data </h3>
-                <h3>JUCE</h3>
-                
-                <h3>C</h3>
-               
-              
-                <h3>C++</h3>
-                <h3>Typescript</h3>
-                <h3>CSS</h3>
-                <h3>HTML</h3>
-                <h3>Javascript</h3>
-                <h3>React</h3>
-                <h3>Git</h3>
-                <h3>Matlab</h3>
-                <h3>Analogue Electronics</h3>
-                <h3>Physical Modeling</h3>
-                <h3>Digital Electronics</h3>
-                <h3>Microcontrollers</h3>
-                
-                <br />
-                <hr />
-                <h2>Music</h2><ProgressBar width={250} percent={50} />
-                <h3>Composition & arranging</h3>
-                <h3>Piano</h3>
-                
-                
-                <h3>Tuned percussion-Vibraphone & Marimba</h3>
-                
-                
-                
-                
-                <h3>Trumpet</h3>
-                
-                <h3>Guitar</h3>
-                
-                <h3>Electric bass</h3>
-                <h3>Musescore</h3>
-                <h3>Sibelius</h3>
-                <h3>Logic Pro X</h3>
-                <h3>Ableton Live </h3>
-                <h3>Fl Studio</h3>
-                <h3>Pro Tools</h3>
-                
-                <br />
-                <hr />
-                <h2>Other Skills</h2>
-                <ul>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                  <li></li>
-                </ul>
+                Current technical toolkit and musical capabilities, continuously evolving.
               </p>
+              
+              <br />
+              <hr />
+              
+              <h2>Programming & DSP</h2>
+              <h3>C/C++</h3>
+              <h3>Python</h3>
+              <h3>Rust</h3>
+              <h3>Faust</h3>
+              <h3>JUCE Framework</h3>
+              <h3>Real-time Audio Processing</h3>
+              <h3>Digital Signal Processing</h3>
+              <h3>Machine Learning (PyTorch)</h3>
+              <h3>Pure Data</h3>
+              <h3>MATLAB/Octave</h3>
+              
+              <br />
+              <hr />
+              
+              <h2>Web Development</h2>
+              <h3>TypeScript/JavaScript</h3>
+              <h3>React</h3>
+              <h3>Node.js</h3>
+              <h3>HTML/CSS</h3>
+              <h3>Git</h3>
+              
+              <br />
+              <hr />
+              
+              <h2>Electronics & Hardware</h2>
+              <h3>Analog Circuit Design</h3>
+              <h3>Digital Electronics</h3>
+              <h3>Microcontrollers (STM32, Arduino)</h3>
+              <h3>PCB Design</h3>
+              <h3>Audio Hardware Development</h3>
+              
+              <br />
+              <hr />
+              
+              <h2>Musical Performance</h2>
+              <h3>Piano (Primary)</h3>
+              <h3>Trumpet</h3>
+              <h3>Vibraphone & Marimba</h3>
+              <h3>Guitar & Bass</h3>
+              <h3>Music Composition & Arrangement</h3>
+              <h3>Jazz Performance</h3>
+              <h3>Music Transcription & Analysis</h3>
+              
+              <br />
+              <hr />
+              
+              <h2>Audio Production</h2>
+              <h3>Logic Pro X</h3>
+              <h3>Ableton Live</h3>
+              <h3>Pro Tools</h3>
+              <h3>Music Notation (Sibelius, MuseScore)</h3>
+              <h3>Audio Plugin Development</h3>
             </S.textModal>
           </S.layoutMainContent>
         </S.layoutMain>

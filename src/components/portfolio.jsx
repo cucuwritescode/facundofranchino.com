@@ -26,7 +26,7 @@ function Portfolio({ closePortfolio, isMobile }) {
         <S.textModal>
           <h1>Portfolio</h1>
           <p>
-            A selection of my key projects in audio programming, DSP, and software development.
+            A selection of recent work in computer science, electronics, signal processing, and musical audio.
           </p>
           <hr />
           

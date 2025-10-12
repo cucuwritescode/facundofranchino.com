@@ -1,5 +1,5 @@
 {
-  "homepage": "https://cucuwritescode.github.io/facundofranchino.github.io",
+  "homepage": "https://facundofranchino.com",
   "name": "facundofranchino",
   "version": "0.1.0",
   "private": true,
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -b master -d build",
+    "deploy": "gh-pages -d build -f",
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test"

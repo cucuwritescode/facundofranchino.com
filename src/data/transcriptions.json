@@ -1,20 +1,10 @@
 [
   {
     "id": 1,
-    "title": "America The Beautiful",
+    "title": "America The Beautiful (Ward) arranged by Clare Fischer on 1967's Songs From Rainy Day Lovers",
     "slug": "america-the-beautiful-fischer",
-    "composer": "Samuel A. Ward",
-    "arranger": "Clare Fischer",
-    "date": "2022",
-    "instrumentation": "String Quartet, Guitar, Harp/Guitar, Piano, Upright Bass",
-    "difficulty": "Advanced",
     "description": "A delicious arrangement and orchestration of the classic American hymn by the late great Clare Fischer (RIP). Through it one can appreciate Fischer's sophisticated harmonic language and mastery of orchestral texture taking a \"simple\" folk song as canvas.",
     "notes": "This was transcribed fully by ear from Fischer's 1967 Songs From Rainy Day Lovers, so I'm open to feedback/corrections. Early fall of 2022, Buenos Aires.",
-    "pdfFile": "FischerAmericaTheBeautifulFacundoFranchino.pdf",
-    "pages": 6,
-    "keySignature": "D Major",
-    "timeSignature": "4/4",
-    "tempo": "♩ = 90 (with tempo changes)",
-    "tags": ["clare fischer", "folk", "string quartet", "jazz", "orchestral"]
+    "pdfFile": "FischerAmericaTheBeautifulFacundoFranchino.pdf"
   }
 ]
