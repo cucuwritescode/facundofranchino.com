@@ -54,6 +54,7 @@ import Portfolio from "./portfolio";
 import CV from "./cv";
 import Tunes from "./tunes";
 import Blog from "./blog";
+import Transcriptions from "./transcriptions";
 
 function Desktop() {
   /* Mobile detection */
@@ -172,11 +173,29 @@ const handleCloseAlbumModal = useCallback(() => {
 
   const [blogOpened, toggleBlog] = useState(false);
 
-  // Check for blog hash URLs on page load
+  /* Transcriptions Shortcut */
+
+  const closeTranscriptions = () => {
+    toggleTranscriptions(false);
+    // Clear the hash from URL when closing transcriptions
+    window.history.pushState({}, '', window.location.pathname);
+  };
+
+  const openTranscriptions = () => {
+    toggleTranscriptions(true);
+    // Update URL to show transcriptions is open
+    window.history.pushState({}, '', '#transcriptions');
+  };
+
+  const [transcriptionsOpened, toggleTranscriptions] = useState(false);
+
+  // Check for hash URLs on page load
   React.useEffect(() => {
     const hash = window.location.hash;
     if (hash.startsWith('#blog')) {
       toggleBlog(true);
+    } else if (hash.startsWith('#transcriptions')) {
+      toggleTranscriptions(true);
     }
   }, []);
 
@@ -521,6 +540,7 @@ const handleCloseAlbumModal = useCallback(() => {
           openCV={openCV}
           openTunes={openTunes}
           openBlog={openBlog}
+          openTranscriptions={openTranscriptions}
         />
         {explorerOpened && (
           <Portfolio
@@ -535,6 +555,9 @@ const handleCloseAlbumModal = useCallback(() => {
         )}
         {blogOpened && (
           <Blog closeBlog={closeBlog} isMobile={isMobile} />
+        )}
+        {transcriptionsOpened && (
+          <Transcriptions closeTranscriptions={closeTranscriptions} isMobile={isMobile} />
         )}
       </React.Fragment>
     </ThemeProvider>
