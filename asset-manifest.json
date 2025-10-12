@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/facundofranchino.github.io/static/css/main.6a991a40.chunk.css",
-    "main.js": "/facundofranchino.github.io/static/js/main.28643b6d.chunk.js",
-    "main.js.map": "/facundofranchino.github.io/static/js/main.28643b6d.chunk.js.map",
+    "main.js": "/facundofranchino.github.io/static/js/main.36b22849.chunk.js",
+    "main.js.map": "/facundofranchino.github.io/static/js/main.36b22849.chunk.js.map",
     "runtime-main.js": "/facundofranchino.github.io/static/js/runtime-main.6b46b4ae.js",
     "runtime-main.js.map": "/facundofranchino.github.io/static/js/runtime-main.6b46b4ae.js.map",
-    "static/js/2.d10ec947.chunk.js": "/facundofranchino.github.io/static/js/2.d10ec947.chunk.js",
-    "static/js/2.d10ec947.chunk.js.map": "/facundofranchino.github.io/static/js/2.d10ec947.chunk.js.map",
+    "static/js/2.6a06a8ab.chunk.js": "/facundofranchino.github.io/static/js/2.6a06a8ab.chunk.js",
+    "static/js/2.6a06a8ab.chunk.js.map": "/facundofranchino.github.io/static/js/2.6a06a8ab.chunk.js.map",
     "index.html": "/facundofranchino.github.io/index.html",
     "static/css/main.6a991a40.chunk.css.map": "/facundofranchino.github.io/static/css/main.6a991a40.chunk.css.map",
-    "static/js/2.d10ec947.chunk.js.LICENSE.txt": "/facundofranchino.github.io/static/js/2.d10ec947.chunk.js.LICENSE.txt",
+    "static/js/2.6a06a8ab.chunk.js.LICENSE.txt": "/facundofranchino.github.io/static/js/2.6a06a8ab.chunk.js.LICENSE.txt",
     "static/media/GR001393.21b16ad9.JPG": "/facundofranchino.github.io/static/media/GR001393.21b16ad9.JPG",
     "static/media/GR001551.7b669dba.JPG": "/facundofranchino.github.io/static/media/GR001551.7b669dba.JPG",
     "static/media/MS-Sans-Serif.30dfad5d.eot": "/facundofranchino.github.io/static/media/MS-Sans-Serif.30dfad5d.eot",
@@ -28,8 +28,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.6b46b4ae.js",
-    "static/js/2.d10ec947.chunk.js",
+    "static/js/2.6a06a8ab.chunk.js",
     "static/css/main.6a991a40.chunk.css",
-    "static/js/main.28643b6d.chunk.js"
+    "static/js/main.36b22849.chunk.js"
   ]
 }
