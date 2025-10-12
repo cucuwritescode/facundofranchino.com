@@ -24,120 +24,59 @@ function Portfolio({ closePortfolio, isMobile }) {
     >
       <S.layoutMainContent bg="white" boxShadow="in">
         <S.textModal>
-          <h1>Short Portfolio</h1>
+          <h1>Portfolio</h1>
           <p>
-            This is a shortened, non-visual version of my portfolio without
-            detailed information on the projects I have been working on. If you
-            are interested in seeing any of the work I have done in more detail,
-            please contact me for a call and I'll present the learnings in more
-            detail.
+            A selection of my key projects in audio programming, DSP, and software development.
           </p>
           <hr />
-          <h2>Pan-adero</h2>
-          <h3>Auto-pan audio effect plugin</h3>
-          <span>
-            Role: 
-          </span>
-          <p>
-            <h4>Background:</h4>
-            
-
-
-
-
-
-
-          </p>
-          <hr />
-          <h2>The Audio Player95</h2>
-          <h3>Rust and Typescript/React audio player</h3>
-          <span>Role: </span>
-          <p>
-            <h4>Background:</h4>
-            
-
-
-
-
-
-
-
-            <h4>Solution:</h4>
-            
-
-
-
-
-
-
-          </p>
-          <hr />
-          <h2>Algorithmic Reverb</h2>
-          <h3>algorithmic reverb plugin</h3>
-          <span>Role:</span>
-          <p>
-            <h4>Background:</h4>
-            
-
-
-
-
-            <h4>Solution:</h4>
-            
-
-
-
-
-
-          </p>
-          <hr />
-          <h2>Website design and development</h2>
-          <h3>facundofranchino.com</h3>
-          <span>Role: Designer/Developer</span>
-          <p>
-            <h4>Background</h4>
-            
-
-
-
-            <h4>Solution</h4>
-            
-
-
-
-
-          </p>
-          <hr />
-          <h2>Instagram Unfollowers tool</h2>
-          <h3>instagram-unfollowers-analyzer</h3>
-          <span>Role:</span>
-          <p>
-            <h4>Background</h4>
           
-
-
-
-            <h4>Solution</h4>
-           
-
-
-
+          <h2>faust2clap</h2>
+          <h3>Google (GSoC) - GRAME</h3>
+          <p>
+            Developed an officially supported Faust compiler backend for the CLAP (CLever Audio Plugin) standard, 
+            merged into Faust's latest release (2.81.8) under the supervision of Jatin Chowdhury (MIT) and Stéphane Letz (GRAME/INRIA).
+          </p>
+          <p>
+            Designed and implemented the faust2clap compiler tool, generating CLAP-compliant real-time plugin binaries 
+            and enabling dynamic hot-reloading of DSP code directly in DAWs.
+          </p>
+          <p>
+            Investigated real-time audio challenges including polyphonic voice management, parameter mapping architectures, 
+            and event-driven modulation frameworks across macOS, Windows, and Linux.
           </p>
           <hr />
-          <h2>Maintenance website</h2>
-          <h3>
-            
-
-
-          </h3>
-          <span>Role: </span>
+          
+          <h2>amadeus</h2>
+          <h3>Individual Project</h3>
           <p>
-            <h4>Background</h4>
-       
-
-
-
-
+            Real-time multiple F0 (polyphonic pitch) estimation on iOS, individual project.
+            First implementation of a computationally efficient and real-time Swift version of the Constant Q Transform algorithm.
+          </p>
+          <hr />
+          
+          <h2>Real-time methods for Reverberation and Restoration Algorithms in Audio Signal Processing</h2>
+          <h3>BEng Thesis</h3>
+          <p>
+            Design and implementation of reverberation algorithms, with particular attention to approaches such as 
+            velvet-noise-based structures and feedback delay networks. 
+            Investigating restoration techniques, such as denoising and audio degradation modelling, to examine both 
+            undesired and deliberately aesthetic forms of signal alteration.
+          </p>
+          <hr />
+          
+          <h2>Pure Harmony</h2>
+          <p>
+            Chosen best of my cohort and was presented to the IET in April 2025. Led team, conceptualised, 
+            designed, and implemented the entire project, from initial idea to functional prototype.
+          </p>
+          <p>
+            Developed a custom low-level MIDI driver and harmonisation algorithm based on Arvo Pärt's 'Tintinnabuli' 
+            composition system, for the STM32F4 microcontroller. This enabled real-time polyphonic processing with 
+            efficient buffer management.
+          </p>
+          <p>
+            Engineered the full software and DSP pipeline, including a custom reverb algorithm and dynamic filtering, 
+            while also handling firmware integration and user interface design.
           </p>
 
         </S.textModal>

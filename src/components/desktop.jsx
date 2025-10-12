@@ -53,6 +53,7 @@ import {
 import Portfolio from "./portfolio";
 import CV from "./cv";
 import Tunes from "./tunes";
+import Blog from "./blog";
 
 function Desktop() {
   /* Mobile detection */
@@ -155,6 +156,31 @@ const handleCloseAlbumModal = useCallback(() => {
 
   const [tunesOpened, toggleTunes] = useState(false);
 
+  /* Blog Shortcut */
+
+  const closeBlog = () => {
+    toggleBlog(false);
+    // Clear the hash from URL when closing blog
+    window.history.pushState({}, '', window.location.pathname);
+  };
+
+  const openBlog = () => {
+    toggleBlog(true);
+    // Update URL to show blog is open
+    window.history.pushState({}, '', '#blog');
+  };
+
+  const [blogOpened, toggleBlog] = useState(false);
+
+  // Check for blog hash URLs on page load
+  React.useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.startsWith('#blog')) {
+      toggleBlog(true);
+    }
+  }, []);
+
+
   return (
     <ThemeProvider theme="millenium">
       <GlobalStyle></GlobalStyle>
@@ -177,14 +203,19 @@ const handleCloseAlbumModal = useCallback(() => {
         >
           <S.layoutMainContent bg="white" boxShadow="out">
             <S.textModal>
-              <h1>Hola!</h1>
+              <h1>About</h1>
               <p>
-                My name is Facundo, an audio programmer, multi-instrumentalist/composer & electronics engineering with music technology systems student from Buenos Aires. 
-                Lately, I've been developing audio applications and plugins. I'm into digital signal processing, deep learning with audio and enjoy making pleasant-looking retro UI's for my software. 
-                On the music side, I'm classically trained on piano and lead my own modern jazz trio. 
-               
+                I'm Facundo, a programmer, multi-instrumentalist and composer from Buenos Aires, currently reading my final year of Electronics Engineering with Music Technology Systems at the University of York.
               </p>
-
+              <p>
+                My work focuses on digital signal processing, real-time systems, and music information retrieval.
+              </p>
+              <br />
+              <p style={{ fontStyle: 'italic', textAlign: 'center' }}>
+                "Do only what only you can do"
+                <br />
+                <span style={{ fontSize: '12px' }}>— Edsger W. Dijkstra</span>
+              </p>
             </S.textModal>
           </S.layoutMainContent>
         </S.layoutMain>
@@ -489,6 +520,7 @@ const handleCloseAlbumModal = useCallback(() => {
           openPortfolio={openPortfolio}
           openCV={openCV}
           openTunes={openTunes}
+          openBlog={openBlog}
         />
         {explorerOpened && (
           <Portfolio
@@ -500,6 +532,9 @@ const handleCloseAlbumModal = useCallback(() => {
         {cvOpened && <CV items={items} closeCV={closeCV} isMobile={isMobile} />}
         {tunesOpened && (
           <Tunes items={items} closeTunes={closeTunes} isMobile={isMobile} />
+        )}
+        {blogOpened && (
+          <Blog closeBlog={closeBlog} isMobile={isMobile} />
         )}
       </React.Fragment>
     </ThemeProvider>
