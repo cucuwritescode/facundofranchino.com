@@ -3,9 +3,9 @@ import { GlobalStyle, ThemeProvider } from "@react95/core";
 import IconBox from "./iconBox";
 import IconText from "./iconText";
 import "./styles.scss";
-import { Awfxcg321303, Explorer103, CdMusic, Mshtml32534, Progman13 } from "@react95/icons";
+import { Awfxcg321303, Explorer103, CdMusic, Mshtml32534, Progman32 } from "@react95/icons";
 
-function Shortcuts({ openPortfolio, openCV, openTunes, openBlog, openTranscriptions }) {
+function Shortcuts({ openPortfolio, openCV, openTunes, openReader, openTranscriptions }) {
   return (
     <div>
       <ThemeProvider>
@@ -22,12 +22,12 @@ function Shortcuts({ openPortfolio, openCV, openTunes, openBlog, openTranscripti
           <CdMusic className="pointer" variant="32x32_4" />
           <IconText className="pointer">Tunes</IconText>
         </IconBox>
-        <IconBox className="pointer" onClick={() => openBlog()}>
+        <IconBox className="pointer" onClick={() => openReader()}>
           <Mshtml32534 className="pointer" variant="32x32_4" />
           <IconText className="pointer">Blog.exe</IconText>
         </IconBox>
         <IconBox className="pointer" onClick={() => openTranscriptions()}>
-          <Progman13 className="pointer" variant="32x32_4" />
+          <Progman32 className="pointer" variant="32x32_4" />
           <IconText className="pointer">Transcriptions</IconText>
         </IconBox>
       </ThemeProvider>

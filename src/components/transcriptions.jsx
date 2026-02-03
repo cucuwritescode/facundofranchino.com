@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { List, Frame, Button } from "@react95/core";
-import { Progman13 } from "@react95/icons";
+import { Progman32 } from "@react95/icons";
 import * as S from "./layoutStyling";
 import transcriptionsData from "../data/transcriptions.json";
 
@@ -46,7 +46,7 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
         title={`${currentTranscription.title} - Transcriptions`}
         closeModal={closeTranscriptions}
         height="100%"
-        icon={<Progman13 variant="32x32_4" />}
+        icon={<Progman32 variant="32x32_4" />}
         menu={[
           {
             name: "Options",
@@ -72,24 +72,35 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
             
             <h1>{currentTranscription.title}</h1>
 
+            {currentTranscription.audioFile && (
+              <div style={{ marginBottom: '20px' }}>
+                <h3>Listen along:</h3>
+                <audio controls style={{ width: '100%' }}>
+                  <source src={`/${currentTranscription.audioFile}`} type="audio/mpeg" />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            )}
+
             <div style={{ marginBottom: '20px' }}>
-              <Button 
-                onClick={() => handlePDFDownload(currentTranscription.pdfFile)}
-                style={{ marginRight: '10px' }}
+              <iframe 
+                src={`/${currentTranscription.pdfFile}`}
+                width="100%" 
+                height="600px" 
+                style={{ border: '1px solid #ccc' }}
+                title="PDF Viewer"
               >
-                📄 View/Download PDF
-              </Button>
+                <Button 
+                  onClick={() => handlePDFDownload(currentTranscription.pdfFile)}
+                  style={{ marginRight: '10px' }}
+                >
+                  📄 View/Download PDF
+                </Button>
+              </iframe>
             </div>
 
             <h3>About this transcription</h3>
             <p>{currentTranscription.description}</p>
-            
-            {currentTranscription.notes && (
-              <>
-                <h3>Transcription Notes</h3>
-                <p>{currentTranscription.notes}</p>
-              </>
-            )}
           </S.textModal>
         </S.layoutMainContent>
       </S.layoutMain>
@@ -102,7 +113,7 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
       title="Transcriptions"
       closeModal={closeTranscriptions}
       height="100%"
-      icon={<Progman13 variant="32x32_4" />}
+      icon={<Progman32 variant="32x32_4" />}
       menu={[
         {
           name: "Options",
@@ -118,9 +129,7 @@ function Transcriptions({ closeTranscriptions, isMobile }) {
         <S.textModal>
           <h1>Transcriptions</h1>
           <p>
-            A collection of musical transcriptions featuring jazz arrangements, 
-            orchestral works, and various musical styles. Each transcription 
-            includes detailed notation and performance notes.
+            An archive of (some) of my musical transcriptions. Correspondence, discussion or corrections are most welcome!
           </p>
           
           <h2>Available Transcriptions</h2>

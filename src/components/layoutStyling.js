@@ -24,7 +24,7 @@ export const layoutMain = styled(Modal)`
 export const layoutMainContent = styled(Frame)`
   overflow-y: auto;
   max-height: 70vh;
-  margin: auto;
+  ${(props) => props.fullWidth ? 'margin: 0; width: 100%;' : 'margin: auto;'}
   ${media.lessThan("large")`
   max-height: 70vh;
   `}

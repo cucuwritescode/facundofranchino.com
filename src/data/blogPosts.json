@@ -1,20 +1,157 @@
-[
-  {
-    "id": 2,
-    "title": "Developing faust2clap - Chapter 1: faust2clap basics",
-    "slug": "developing-faust2clap-chapter-1",
-    "date": "2025-08-24",
-    "location": "York, United Kingdom",
-    "excerpt": "First chapter in a series about developing faust2clap - exploring Faust, CLAP, and building audio plugins.",
-    "content": "# Developing faust2clap\n*by Facundo Franchino*\n\n## Chapter one: faust2clap basics\n\n### What is Faust?\n\nFor those yet unfamiliar, the Faust programming language has been designed to provide audio signal processing developers an orders of magnitude/exponentially faster way to develop and deploy their digital signal processing algorithms, instruments, effects, etc. For a time where one required both a C++ expert developer and a signal processing specialist to create efficient DSP algorithms and its real-time implementations, Faust comes in to serve those familiar with the discipline of digital signal processing to save hours worth of work on tedious efficient real-time implementations and provides them an ecosystem to quickly test their DSP ideas both rapidly and intuitively.\n\nFunctional AUdio STream's workflow and ecosystem essentially consists of the programming language and its own compiler, as well as several other components for testing, benchmarks and optimisation, as well as running the resulting code on various other architectures.\n\n### What is CLAP?\n\nAs stated on the official documentation, CLAP stands for CLever Audio Plugin, and it's an interface that provides a stable Application Binary Interface, which is the means of communication between the Host and Digital Audio Workstations. Unlike VST, it's free and open-source, and also tackles several issues with the 25 year old technology in terms of simplicity, clarity and robustness.\n\n### faust2[…] tools\n\nThis is a set of scripts which utilise .dsp files as an input and thence can generate various output for several architectures and platforms. Their standard name in the ecosystem is faust2xx where xx is the target architecture.\n\n### So, what is faust2clap?\n\nAs you may have realised by now, faust2clap is a series of scripts that target the Clever Audio Plugin (CLAP) architecture. The computer code for the static compilation can be found in clap-arch.cpp. This script acts as a bridge between Faust-generated digital signal processing code and the CLAP plugin API. It implements a CLAP plugin backend by wrapping Faust's mydsp class (inherits of the virtual class dsp), which is the single c++ class faust programs are described in.\n\nThe static build process is automated by a python script \"faust2clap.py\" which generates and builds a static CLAP plugin from your .dsp source code. This means after a few seconds, you're able to open any example faust code or your own dsp ideas to be tested as a plugin in your preferred CLAP supported DAW.\n\n### Dynamic Hot-Reload Solution\n\nBut hey, this could be done even faster! I developed a second tool which dynamically generates a single plugin that can hot-reload .dsp files on the fly. This means you can test your dsp code on a generated one size fits all \"Faust Dynamic.clap\" plugin on your preferred CLAP supported DAW while you edit your faust code on a text editor. This provides a lightning-fast solution for testing and usage to be carried out in the same environment in which the final plugin will be utilised, for instance Reaper, FL Studio, etc.\n\nAnother use case is switching between different .dsp files, you may open freeverb.dsp and then jump onto smoothDelay.dsp on the same audio track without batting an eye, parameter names will update automatically and you'll be able to play with various effects on the fly.\n\n### User Interface\n\nSince a dedicated friendly JUCE GUI hasn't been developed yet, and there is no on-display preset management system to alternate between various .dsp files, this has to be done from the terminal. But I thought I'd make it temporarily more user-friendly, so I wrote an external python script that generates a dedicated UI for file loading. It can be ran with the following commands (assuming you're on the faust directory in your terminal):\n\n```\ncd architecture/clap\npython faust-hot-reload.py\n```\n\nYou should be able to see the following interface:\n\n![Faust Hot Reload UI](faust-hot-reload-ui.png)\n\n*More chapters coming soon...*"
-  },
-  {
-    "id": 1,
-    "title": "Welcome to my blog",
-    "slug": "welcome-to-my-blog",
-    "date": "2025-07-20",
-    "location": "Stanford, CA",
-    "excerpt": "My small corner for notes, experiments, and observations on signal processing mathematics, algorithms, sound, computation and music.",
-    "content": "# Welcome\n\nThis is my small corner for notes, experiments, and observations mostly on signal processing mathematics, algorithms, sound, computation and music.\n\nIt serves as a record of ongoing work and occasional reflections."
-  }
-]
+{
+  "categories": [
+    {
+      "name": "Chord Recognition",
+      "slug": "chord-recognition",
+      "posts": [
+        {
+          "title": "Introduction: Template-based Chord Recognition",
+          "date": "2026-01-02",
+          "category": "",
+          "excerpt": "",
+          "location": "",
+          "iframeSrc": "/chord-recognition/index.html",
+          "slug": "chord-recognition/template-based-chord-recognition"
+        }
+      ]
+    },
+    {
+      "name": "Communication Systems and Digital Communications",
+      "slug": "communication-systems",
+      "posts": [
+        {
+          "title": "Huffman Coding: The Art of Efficiency",
+          "date": "2026-01-01",
+          "category": "",
+          "excerpt": "",
+          "location": "",
+          "iframeSrc": "/communication-systems/huffman-coding/index.html",
+          "slug": "communication-systems/huffman-coding-optimised-approach"
+        },
+        {
+          "title": "Information Theory: Introduction",
+          "date": "2025-10-15",
+          "category": "Communication Systems and Digital Communications",
+          "excerpt": "An introduction to the mathematical foundations of information theory and its applications in digital communications.",
+          "location": "",
+          "iframeSrc": "/communication-systems/information-theory/index.html",
+          "slug": "communication-systems/information-theory-intro"
+        }
+      ]
+    },
+    {
+      "name": "Computer Science",
+      "slug": "computer-science",
+      "posts": [
+        {
+          "title": "Huffman Coding: The Art of Efficiency",
+          "date": "2026-01-01",
+          "category": "",
+          "excerpt": "",
+          "location": "",
+          "iframeSrc": "/communication-systems/huffman-coding/index.html",
+          "slug": "computer-science/huffman-coding-optimised-approach"
+        },
+        {
+          "title": "Why I moved from on-device CoreML to server-based transcription",
+          "date": "2025-11-25",
+          "category": "Computer Science",
+          "excerpt": "Rethinking Basic Pitch integration for an iOS chord recognition app - why the on-device approach didn't work.",
+          "location": "York, UK",
+          "iframeSrc": "/computer-science/basic-pitch-ios/index.html",
+          "slug": "computer-science/rethinking-basic-pitch-ios"
+        },
+        {
+          "title": "faust2clap Presentation at AudioLabs",
+          "date": "2025-11-19",
+          "category": "Computer Science",
+          "excerpt": "Presentation materials from my faust2clap talk at AudioLabs.",
+          "location": "York, UK",
+          "iframeSrc": "/computer-science/audiolabs-faust2clap/index.html",
+          "slug": "computer-science/audiolabs-faust2clap-2025"
+        },
+        {
+          "title": "Presenting faust2clap at ADC 2025",
+          "date": "2025-11-06",
+          "category": "Computer Science",
+          "excerpt": "I'll be presenting my work on faust2clap at the Audio Developer Conference in Bristol next week.",
+          "location": "York, UK",
+          "iframeSrc": "/computer-science/adc-2025/index.html",
+          "slug": "computer-science/adc-2025-announcement"
+        },
+        {
+          "title": "Developing faust2clap - Chapter 1: faust2clap basics",
+          "date": "2025-08-24",
+          "category": "Computer Science",
+          "excerpt": "First chapter in a series about developing faust2clap - exploring Faust, CLAP, and building audio plugins.",
+          "location": "York, United Kingdom",
+          "iframeSrc": "/computer-science/faust2clap-basics/index.html",
+          "slug": "computer-science/faust2clap-basics"
+        }
+      ]
+    },
+    {
+      "name": "Pedagogy",
+      "slug": "pedagogy",
+      "posts": [
+        {
+          "title": "Short Essay: On the Pedagogy of Nikolai Zverev",
+          "date": "2024-12-01",
+          "category": "Pedagogy",
+          "excerpt": "An exploration of the remarkable pedagogical system that shaped both Rachmaninoff and Scriabin through total immersion and disciplined formation.",
+          "location": "York, UK",
+          "content": "# On the Pedagogy of Nikolai Zverev\\n\\nThe pedagogical system devised and implemented by Nikolai Sergeyevich Zverev (1832–1893) offers, upon even cursory examination, a singular case study in the formation of pianistic genius in late-imperial Russia. Zverev's role as teacher and mentor to Sergei Rachmaninoff and Alexander Scriabin, two figures whose respective oeuvres are now canonical, compels a more thorough appraisal of both the methods and ethos that underpinned his instruction. It would be difficult to imagine two temperaments more divergent in their artistic trajectories, yet each emerged from the same crucible: Zverev's household in Moscow.\\n\\nThe defining feature of Zverev's pedagogical practice was not so much a system of exercises or curricula (though those were present in abundance), but a way of life. Instruction was delivered not in the classroom, but in the salon; not for an hour each week, but in the continuous proximity afforded by residential tutelage. Zverev took into his home a small number of highly gifted boys, whom he housed, clothed, fed, and disciplined with a rigour that bordered on the monastic. The day began before sunrise and concluded in early evening. Each student was allotted a three-hour period at the piano, which was observed with absolute strictness. Deviations from the timetable, whether out of fatigue, disobedience, or mere forgetfulness, were met with rebuke, sometimes of an alarmingly physical nature.\\n\\nYet there was in Zverev no mere martinet. The regimen was severe, certainly, but not unthinking. He exposed his pupils to the finest artistic offerings Moscow could provide: the Bolshoi Theatre, chamber recitals, dramatic performances, and the salons of the city's intellectual elite. Lessons were given not only in music but in manners, languages, and literature. Indeed, Rachmaninoff later credited Zverev with a general refinement of character and intellect that extended far beyond the keyboard. His pupils were instructed in the art of conversation, the decorum of the dinner table, and the responsibilities of cultural citizenship. Music, for Zverev, was not a profession; it was a mode of being.\\n\\nThe consequences of such an education are best measured not by anecdote, but by output. When Rachmaninoff entered the senior division of the Moscow Conservatory, he did so with a formidable technique and an already mature artistic sensibility. Scriabin, meanwhile, although not a boarder in Zverev's household, received similar instruction and participated in many of the same rituals of training. He too displayed, from an early age, a fusion of technical command and expressive ambition that Zverev's approach seems to have cultivated. The fact that both artists, in their own ways, so quickly transcended the normative expectations of their time cannot be entirely disassociated from the nature of their formative discipline.\\n\\nThe relationship between pupil and teacher, however, was not always harmonious. Rachmaninoff's eventual estrangement from Zverev is often attributed to a request for private time to compose, a request that was brusquely denied. Zverev, it seems, conceived of musical excellence in terms almost exclusively performative. Composition, especially in the hands of a student, was viewed as a distraction from the more serious discipline of interpretation. That Rachmaninoff persisted in his compositional ambitions, ultimately departing Zverev's household, should not obscure the profound debt he owed to his early training. The gold watch that Zverev later presented to him on the day of his graduation suggests, if nothing else, that the teacher recognised in retrospect the value of what he had, in the moment, refused to accommodate.\\n\\nScriabin, in contrast, was never fully immersed in the household's rhythms. As a day student, he avoided the privations and constraints that shaped Rachmaninoff's daily life. The result was not necessarily a looser education, but perhaps a less psychologically enclosing one. Scriabin composed early and prolifically, and though his hand injury (likely brought on by the excessive demands of Lisztian repertoire) suggests that he too pushed the limits of his training, the character of his early works reveals an already idiosyncratic harmonic language. It is tempting to suppose that the comparative freedom he enjoyed outside Zverev's direct domestic sphere allowed this language to emerge more swiftly, or at least with fewer obstacles.\\n\\nWhat, then, are we to make of Zverev's pedagogy? It is tempting to interpret it in terms of binary oppositions: severity and inspiration, tradition and innovation, constraint and freedom. But such a reading would misrepresent the internal logic of Zverev's household, in which these categories did not so much compete as coexist. His method, if it can be called such, was one of total immersion, a pedagogy by saturation. The student was not trained so much as transformed. The walls of the studio were not simply walls; they were thresholds, enclosing a world of aesthetic purpose and demanding fidelity to its values.\\n\\nZverev's legacy, accordingly, cannot be confined to a list of his students' accomplishments, impressive though they are. It resides more deeply in a conception of musical training as a mode of life: exacting, elevated, and total. That such a model is scarcely practicable today does not diminish its historical interest. On the contrary, in an age when the fragmentation of study and the dilution of discipline are often mistaken for innovation, Zverev's example serves as both a corrective and a provocation. He reminds us that the cultivation of genius is not always a gentle enterprise, and that the most profound musical expressions sometimes spring not from spontaneity, but from structure.",
+          "slug": "pedagogy/zverev-pedagogy"
+        }
+      ]
+    },
+    {
+      "name": "Reverberation",
+      "slug": "reverberation",
+      "posts": [
+        {
+          "title": "What is Velvet Noise?",
+          "date": "2025-02-28",
+          "category": "Reverberation",
+          "excerpt": "A concise technical overview of velvet noise, its mathematical formulation, and its applications in artificial reverberation and spatial audio decorrelation.",
+          "location": "Helsinki, Finland",
+          "iframeSrc": "/reverberation/velvet-noise/index.html",
+          "slug": "reverberation/velvet-noise"
+        },
+        {
+          "title": "Emulating Space and Designing New Ones: From Schroeder to Eno-Lanois",
+          "date": "2026-01-19",
+          "category": "Reverberation",
+          "excerpt": "A comprehensive exploration of artificial reverberation algorithms, from classic Schroeder and Moorer designs to FDNs and shimmer effects.",
+          "location": "York, UK",
+          "iframeSrc": "/MASMS/index.html",
+          "slug": "reverberation/emulating-space"
+        }
+      ]
+    },
+    {
+      "name": "Digital Signal Processing",
+      "slug": "dsp",
+      "posts": [
+        {
+          "title": "On Transforms: The Discrete Time Fourier Transform (DTFT)",
+          "date": "2026-01-30",
+          "category": "Digital Signal Processing",
+          "excerpt": "From sampling reality to the elegant DTFT formula — how we transform discrete time into continuous frequency.",
+          "location": "York, UK",
+          "iframeSrc": "/DSP/dtft/index.html",
+          "slug": "dsp/dtft"
+        },
+        {
+          "title": "On The Elementary Principles of Digital Signal Processing: Introduction",
+          "date": "2026-01-26",
+          "category": "Digital Signal Processing",
+          "excerpt": "An introduction to the fascinating field of signal processing - how we represent, analyse and modify patterns that carry information.",
+          "location": "York, UK",
+          "iframeSrc": "/DSP/index.html",
+          "slug": "dsp/introduction"
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,45 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+
 # ESLint cache
 .eslintcache
 
 # Cache directories
 node_modules/.cache/
+
+# OS files
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Embedded repos / subprojects
+IR Report/
+MASMS/
+cucuweb/
+build/MASMS/
+public/MASMS/
+
+# Large media/binary files (deployed via gh-pages build, not needed in source repo)
+*.mp4
+*.mp3
+*.woff
+*.woff2
+*.ttf
+*.eot
+*.pdf
+
+# Public assets that get copied to build (keep in public/ locally, not in git)
+public/DSP/
+public/article-assets/
+public/chord-recognition/
+public/communication-systems/
+public/computer-science/
+public/cv/
+public/fonts/
+public/portfolio/
+public/reverberation/

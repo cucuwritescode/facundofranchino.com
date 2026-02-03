@@ -4,7 +4,39 @@
     "title": "America The Beautiful (Ward) arranged by Clare Fischer on 1967's Songs From Rainy Day Lovers",
     "slug": "america-the-beautiful-fischer",
     "description": "A delicious arrangement and orchestration of the classic American hymn by the late great Clare Fischer (RIP). Through it one can appreciate Fischer's sophisticated harmonic language and mastery of orchestral texture taking a \"simple\" folk song as canvas.",
-    "notes": "This was transcribed fully by ear from Fischer's 1967 Songs From Rainy Day Lovers, so I'm open to feedback/corrections. Early fall of 2022, Buenos Aires.",
-    "pdfFile": "FischerAmericaTheBeautifulFacundoFranchino.pdf"
+    "pdfFile": "FischerAmericaTheBeautifulFacundoFranchino.pdf",
+    "audioFile": "america-the-beautiful.mp3"
+  },
+  {
+    "id": 2,
+    "title": "Analysis on Bach's algorithmic and \"pattern recycling\" mastery in his first invention",
+    "slug": "bach-invention-1-analysis",
+    "description": "A detailed analysis of Bach's Invention No. 1 in C Major, BWV 772.",
+    "pdfFile": "bach-invention-analysis.pdf",
+    "audioFile": "bach-invention-1.mp3"
+  },
+  {
+    "id": 3,
+    "title": "Bass and chord transcription of Byron Miller's bass line on \"I Want You for Myself\" from \"Master of the Game\" by George Duke",
+    "slug": "george-duke-i-want-you",
+    "description": "Complete bass line and chord changes transcription from George Duke's 1979 album \"Master of the Game\".",
+    "pdfFile": "i-want-you-for-myself-bass.pdf",
+    "audioFile": "george-duke-i-want-you.mp3"
+  },
+  {
+    "id": 4,
+    "title": "Aca Seca Trio's 'Clavelito Blanco' with a Bachian flavour",
+    "slug": "clavelito-blanco",
+    "description": "Interpretation by Aca Seca Trio on the 2006 record \"Avenido\". You can hear the influence of western classical music (most notably) J.S Bach on Juan Quintero's arranging ideas for this track, particularly in the intro fugue-like counterpoint between guitar and piano.",
+    "pdfFile": "clavelito-blanco.pdf",
+    "audioFile": "clavelito-blanco.mp3"
+  },
+  {
+    "id": 5,
+    "title": "At Home by Misha Alperin",
+    "slug": "misha-alperin-at-home",
+    "description": "A transcription of the first composition I ever heard by one of my biggest pianistic influences, the great late Misha Alperin. This was recorded at Alperin's house in February 1998 and released in May 2001 by courtesy of ECM Records. A simple yet haunting composition, his touch and vocabulary are one of a kind. I highly recommend checking out all of his solo work and the Moscow Art Trio albums.",
+    "pdfFile": "at-home.pdf",
+    "audioFile": "at-home.mp3"
   }
 ]

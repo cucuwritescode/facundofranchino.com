@@ -53,7 +53,7 @@ import {
 import Portfolio from "./portfolio";
 import CV from "./cv";
 import Tunes from "./tunes";
-import Blog from "./blog";
+import Reader from "./reader";
 import Transcriptions from "./transcriptions";
 
 function Desktop() {
@@ -110,10 +110,10 @@ function Desktop() {
     setShowAlbumModal(true);
   }, []);
 
-const handleCloseAlbumModal = useCallback(() => {
-  setShowAlbumModal(false);
-  setCurrentAlbum('');
-}, []);
+  const handleCloseAlbumModal = useCallback(() => {
+    setShowAlbumModal(false);
+    setCurrentAlbum('');
+  }, []);
   /* Vaporwave Modal 1 */
   const [showVaporwaveModal1, setShowVaporwaveModal1] = useState(false);
   const handleOpenVaporwaveModal1 = useCallback(() => {
@@ -126,10 +126,12 @@ const handleCloseAlbumModal = useCallback(() => {
   /* Portfolio Shortcut */
   const closePortfolio = () => {
     togglePortfolio(false);
+    window.history.pushState({}, '', window.location.pathname);
   };
 
   const openPortfolio = () => {
     togglePortfolio(true);
+    window.history.pushState({}, '', '#portfolio');
   };
   const [explorerOpened, togglePortfolio] = useState(false);
 
@@ -137,10 +139,12 @@ const handleCloseAlbumModal = useCallback(() => {
 
   const closeCV = () => {
     toggleCV(false);
+    window.history.pushState({}, '', window.location.pathname);
   };
 
   const openCV = () => {
     toggleCV(true);
+    window.history.pushState({}, '', '#cv');
   };
 
   const [cvOpened, toggleCV] = useState(false);
@@ -149,29 +153,31 @@ const handleCloseAlbumModal = useCallback(() => {
 
   const closeTunes = () => {
     toggleTunes(false);
+    window.history.pushState({}, '', window.location.pathname);
   };
 
   const openTunes = () => {
     toggleTunes(true);
+    window.history.pushState({}, '', '#tunes');
   };
 
   const [tunesOpened, toggleTunes] = useState(false);
 
-  /* Blog Shortcut */
+  /* Reader Shortcut */
 
-  const closeBlog = () => {
-    toggleBlog(false);
-    // Clear the hash from URL when closing blog
+  const closeReader = () => {
+    toggleReader(false);
+    // Clear the hash from URL when closing reader
     window.history.pushState({}, '', window.location.pathname);
   };
 
-  const openBlog = () => {
-    toggleBlog(true);
-    // Update URL to show blog is open
-    window.history.pushState({}, '', '#blog');
+  const openReader = () => {
+    toggleReader(true);
+    // Update URL to show reader is open
+    window.history.pushState({}, '', '#reader');
   };
 
-  const [blogOpened, toggleBlog] = useState(false);
+  const [readerOpened, toggleReader] = useState(false);
 
   /* Transcriptions Shortcut */
 
@@ -192,10 +198,16 @@ const handleCloseAlbumModal = useCallback(() => {
   // Check for hash URLs on page load
   React.useEffect(() => {
     const hash = window.location.hash;
-    if (hash.startsWith('#blog')) {
-      toggleBlog(true);
+    if (hash.startsWith('#reader')) {
+      toggleReader(true);
     } else if (hash.startsWith('#transcriptions')) {
       toggleTranscriptions(true);
+    } else if (hash.startsWith('#portfolio')) {
+      togglePortfolio(true);
+    } else if (hash.startsWith('#cv')) {
+      toggleCV(true);
+    } else if (hash.startsWith('#tunes')) {
+      toggleTunes(true);
     }
   }, []);
 
@@ -209,6 +221,14 @@ const handleCloseAlbumModal = useCallback(() => {
           icon={<Progman37 variant="32x32_4" />}
           title={"About.txt"}
           closeModal={handleCloseAboutModal}
+          style={{
+            position: 'fixed',
+            top: '10%',
+            left: isMobile ? '5%' : '20%',
+            margin: '0',
+            width: isMobile ? '90vw' : '60vw',
+            maxWidth: '600px'
+          }}
           menu={[
             {
               name: "Options",
@@ -224,10 +244,10 @@ const handleCloseAlbumModal = useCallback(() => {
             <S.textModal>
               <h1>About</h1>
               <p>
-                I'm Facundo, a programmer, multi-instrumentalist and composer from Buenos Aires, currently reading my final year of Electronics Engineering with Music Technology Systems at the University of York.
+                I'm Facundo, a programmer, multi-instrumentalist and composer from Buenos Aires, currently reading Electronic Engineering at the University of York and writing my final-year thesis.
               </p>
               <p>
-                My work focuses on digital signal processing, real-time systems, and music information retrieval.
+                My work focuses on signal processing, real-time systems, and music information retrieval.
               </p>
               <br />
               <p style={{ fontStyle: 'italic', textAlign: 'center' }}>
@@ -262,10 +282,10 @@ const handleCloseAlbumModal = useCallback(() => {
               <p>
                 Current technical toolkit and musical capabilities, continuously evolving.
               </p>
-              
+
               <br />
               <hr />
-              
+
               <h2>Programming & DSP</h2>
               <h3>C/C++</h3>
               <h3>Python</h3>
@@ -277,30 +297,30 @@ const handleCloseAlbumModal = useCallback(() => {
               <h3>Machine Learning (PyTorch)</h3>
               <h3>Pure Data</h3>
               <h3>MATLAB/Octave</h3>
-              
+
               <br />
               <hr />
-              
+
               <h2>Web Development</h2>
               <h3>TypeScript/JavaScript</h3>
               <h3>React</h3>
               <h3>Node.js</h3>
               <h3>HTML/CSS</h3>
               <h3>Git</h3>
-              
+
               <br />
               <hr />
-              
+
               <h2>Electronics & Hardware</h2>
               <h3>Analog Circuit Design</h3>
               <h3>Digital Electronics</h3>
               <h3>Microcontrollers (STM32, Arduino)</h3>
               <h3>PCB Design</h3>
               <h3>Audio Hardware Development</h3>
-              
+
               <br />
               <hr />
-              
+
               <h2>Musical Performance</h2>
               <h3>Piano (Primary)</h3>
               <h3>Trumpet</h3>
@@ -309,10 +329,10 @@ const handleCloseAlbumModal = useCallback(() => {
               <h3>Music Composition & Arrangement</h3>
               <h3>Jazz Performance</h3>
               <h3>Music Transcription & Analysis</h3>
-              
+
               <br />
               <hr />
-              
+
               <h2>Audio Production</h2>
               <h3>Logic Pro X</h3>
               <h3>Ableton Live</h3>
@@ -359,36 +379,36 @@ const handleCloseAlbumModal = useCallback(() => {
         </S.layoutMain>
       )}
       {showPhotographyModal && (
-  <S.layoutMain
-    isMobile={isMobile}
-    closeModal={handleClosePhotographyModal}
-    height="100%"
-    icon={<Progman13 variant="32x32_4" />}
-    width={340}
-    menu={[
-      {
-        name: "Options",
-        list: (
-          <List>
-            <List.Item onClick={handleClosePhotographyModal}>Close</List.Item>
-          </List>
-        ),
-      },
-    ]}
-    title="Photography"
-  >
-    <S.textModal>
-      <h1>Photography</h1>
-      <p>Select an album to view the photos:</p>
-      <List>
-        <List.Item onClick={() => openAlbum('Album 1')}>Jan 24'-July 24'</List.Item>
-        <List.Item onClick={() => openAlbum('Album 2')}>July 24'-Jan 25'</List.Item>
-        
-        {/* Add more albums as needed */}
-      </List>
-    </S.textModal>
-  </S.layoutMain>
-)}
+        <S.layoutMain
+          isMobile={isMobile}
+          closeModal={handleClosePhotographyModal}
+          height="100%"
+          icon={<Progman13 variant="32x32_4" />}
+          width={340}
+          menu={[
+            {
+              name: "Options",
+              list: (
+                <List>
+                  <List.Item onClick={handleClosePhotographyModal}>Close</List.Item>
+                </List>
+              ),
+            },
+          ]}
+          title="Photography"
+        >
+          <S.textModal>
+            <h1>Photography</h1>
+            <p>Select an album to view the photos:</p>
+            <List>
+              <List.Item onClick={() => openAlbum('Album 1')}>Jan 24'-July 24'</List.Item>
+              <List.Item onClick={() => openAlbum('Album 2')}>July 24'-Jan 25'</List.Item>
+
+              {/* Add more albums as needed */}
+            </List>
+          </S.textModal>
+        </S.layoutMain>
+      )}
 
       {showVaporwaveModal1 && (
         <S.layoutMain
@@ -424,22 +444,22 @@ const handleCloseAlbumModal = useCallback(() => {
             <p>
             </p>
             <a href="https://nudeantstrio.bandcamp.com/">
-      Bandcamp
-      
-    </a>
-    <br /><br />
-    <img src={GR001393} alt="GR001393" width="100%" />
-    <div>
-      <iframe
-        src=""
-        frameborder="0"
-        width="100%"
-        title="GR001393.JPG"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
-    </div>
-  </S.textModal>
+              Bandcamp
+
+            </a>
+            <br /><br />
+            <img src={GR001393} alt="GR001393" width="100%" />
+            <div>
+              <iframe
+                src=""
+                frameborder="0"
+                width="100%"
+                title="GR001393.JPG"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </S.textModal>
         </S.layoutMain>
       )}
       <TaskBar
@@ -491,7 +511,7 @@ const handleCloseAlbumModal = useCallback(() => {
             <List.Item
               icon={<Mspaint variant="32x32_4" />}
               onClick={handleOpenSkillsModal}
-              >
+            >
               Skills
             </List.Item>
             <List.Divider />
@@ -517,7 +537,7 @@ const handleCloseAlbumModal = useCallback(() => {
           openPortfolio={openPortfolio}
           openCV={openCV}
           openTunes={openTunes}
-          openBlog={openBlog}
+          openReader={openReader}
           openTranscriptions={openTranscriptions}
         />
         {explorerOpened && (
@@ -531,8 +551,8 @@ const handleCloseAlbumModal = useCallback(() => {
         {tunesOpened && (
           <Tunes items={items} closeTunes={closeTunes} isMobile={isMobile} />
         )}
-        {blogOpened && (
-          <Blog closeBlog={closeBlog} isMobile={isMobile} />
+        {readerOpened && (
+          <Reader closeReader={closeReader} isMobile={isMobile} />
         )}
         {transcriptionsOpened && (
           <Transcriptions closeTranscriptions={closeTranscriptions} isMobile={isMobile} />

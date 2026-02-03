@@ -1,17 +1,20 @@
 {
   "files": {
     "main.css": "/static/css/main.d66f2931.chunk.css",
-    "main.js": "/static/js/main.53dc9f40.chunk.js",
-    "main.js.map": "/static/js/main.53dc9f40.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.fc58983a.js",
-    "runtime-main.js.map": "/static/js/runtime-main.fc58983a.js.map",
-    "static/js/2.7b0fe45a.chunk.js": "/static/js/2.7b0fe45a.chunk.js",
-    "static/js/2.7b0fe45a.chunk.js.map": "/static/js/2.7b0fe45a.chunk.js.map",
+    "main.js": "/static/js/main.dbdbdd8f.chunk.js",
+    "main.js.map": "/static/js/main.dbdbdd8f.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.f67ac180.js",
+    "runtime-main.js.map": "/static/js/runtime-main.f67ac180.js.map",
+    "static/css/2.d8d11731.chunk.css": "/static/css/2.d8d11731.chunk.css",
+    "static/js/2.e712dc2c.chunk.js": "/static/js/2.e712dc2c.chunk.js",
+    "static/js/2.e712dc2c.chunk.js.map": "/static/js/2.e712dc2c.chunk.js.map",
     "index.html": "/index.html",
+    "static/css/2.d8d11731.chunk.css.map": "/static/css/2.d8d11731.chunk.css.map",
     "static/css/main.d66f2931.chunk.css.map": "/static/css/main.d66f2931.chunk.css.map",
-    "static/js/2.7b0fe45a.chunk.js.LICENSE.txt": "/static/js/2.7b0fe45a.chunk.js.LICENSE.txt",
+    "static/js/2.e712dc2c.chunk.js.LICENSE.txt": "/static/js/2.e712dc2c.chunk.js.LICENSE.txt",
     "static/media/GR001393.21b16ad9.JPG": "/static/media/GR001393.21b16ad9.JPG",
     "static/media/GR001551.7b669dba.JPG": "/static/media/GR001551.7b669dba.JPG",
+    "static/media/katex.min.css": "/static/media/KaTeX_Typewriter-Regular.c5c02d76.ttf",
     "static/media/MS-Sans-Serif.30dfad5d.eot": "/static/media/MS-Sans-Serif.30dfad5d.eot",
     "static/media/MS-Sans-Serif.4fb9ed0f.woff2": "/static/media/MS-Sans-Serif.4fb9ed0f.woff2",
     "static/media/MS-Sans-Serif.82eeac7b.woff": "/static/media/MS-Sans-Serif.82eeac7b.woff",
@@ -23,13 +26,13 @@
     "static/media/styles.scss": "/static/media/bgnd.f16653ad.png",
     "static/media/check-disabled.svg": "/static/media/check-disabled.6c74515b.svg",
     "static/media/check.svg": "/static/media/check.cab94f08.svg",
-    "static/media/faust-hot-reload-ui.45a081da.png": "/static/media/faust-hot-reload-ui.45a081da.png",
     "static/media/rightcaret.4316e9ff.svg": "/static/media/rightcaret.4316e9ff.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.fc58983a.js",
-    "static/js/2.7b0fe45a.chunk.js",
+    "static/js/runtime-main.f67ac180.js",
+    "static/css/2.d8d11731.chunk.css",
+    "static/js/2.e712dc2c.chunk.js",
     "static/css/main.d66f2931.chunk.css",
-    "static/js/main.53dc9f40.chunk.js"
+    "static/js/main.dbdbdd8f.chunk.js"
   ]
 }
