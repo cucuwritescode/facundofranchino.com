@@ -17,40 +17,66 @@
   <meta charset="utf-8" />
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="" />
-  <link rel="apple-touch-icon" href="logo192.png" />
-  <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+  <meta name="theme-color" content="#008080" />
+  <meta name="description" content="Facundo Franchino — programmer, electronic engineer and musician from Buenos Aires. Working on signal processing, real-time audio systems, music information retrieval, and audio plugin development (faust2clap). University of York." />
+  <meta name="keywords" content="Facundo Franchino, signal processing, audio programming, faust2clap, CLAP plugin, Faust, music information retrieval, University of York, electronic engineering, DSP, real-time audio, music transcription" />
+  <meta name="author" content="Facundo Franchino" />
+  <link rel="canonical" href="https://facundofranchino.com" />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-  <title>Facundo Franchino</title>
-  <style></style>
+  <!-- Open Graph (Facebook, LinkedIn, iMessage, etc.) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Facundo Franchino" />
+  <meta property="og:description" content="Programmer, electronic engineer and musician. Signal processing, real-time audio systems, and audio plugin development." />
+  <meta property="og:url" content="https://facundofranchino.com" />
+  <meta property="og:site_name" content="Facundo Franchino" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Facundo Franchino" />
+  <meta name="twitter:description" content="Programmer, electronic engineer and musician. Signal processing, real-time audio systems, and audio plugin development." />
+
+  <link rel="apple-touch-icon" href="logo192.png" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <title>Facundo Franchino — Signal Processing, Audio Programming & Music</title>
 </head>
 
 <body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Facundo Franchino",
+    "url": "https://facundofranchino.com",
+    "jobTitle": "Electronic Engineering Student & Audio Programmer",
+    "affiliation": {
+      "@type": "CollegeOrUniversity",
+      "name": "University of York"
+    },
+    "knowsAbout": ["Digital Signal Processing", "Audio Plugin Development", "Faust Programming Language", "CLAP Audio Plugin", "Music Information Retrieval", "Real-time Audio Systems"],
+    "sameAs": []
+  }
+  </script>
+  <noscript>
+    <h1>Facundo Franchino</h1>
+    <p>Programmer, electronic engineer and musician from Buenos Aires, currently reading Electronic Engineering at the University of York.</p>
+    <p>Work focuses on signal processing, real-time audio systems, and music information retrieval.</p>
+    <h2>Projects</h2>
+    <ul>
+      <li>faust2clap — Faust to CLAP audio plugin compiler</li>
+    </ul>
+    <h2>Writing</h2>
+    <ul>
+      <li>On The Elementary Principles of Digital Signal Processing</li>
+      <li>On Transforms: The Discrete Time Fourier Transform</li>
+      <li>Emulating Space and Designing New Ones: From Schroeder to Eno-Lanois</li>
+      <li>What is Velvet Noise?</li>
+      <li>Template-based Chord Recognition</li>
+      <li>Huffman Coding: The Art of Efficiency</li>
+      <li>Information Theory: Introduction</li>
+    </ul>
+    <p>Contact: <a href="mailto:jbv513@york.ac.uk">jbv513@york.ac.uk</a></p>
+  </noscript>
   <div id="root"></div>
-  <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
 </body>
 
 </html>
