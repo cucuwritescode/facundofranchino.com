@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import GR001393 from '../GR001393.JPG';
 import GR001551 from '../GR001551.JPG';
 import {
@@ -6,6 +6,7 @@ import {
   ThemeProvider,
   List,
   Frame,
+  Button,
   ProgressBar,
   TaskBar,
 } from "@react95/core";
@@ -194,6 +195,33 @@ function Desktop() {
   };
 
   const [transcriptionsOpened, toggleTranscriptions] = useState(false);
+
+  /* Context Menu */
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0 });
+  const [showAccessDenied, setShowAccessDenied] = useState(false);
+
+  const handleContextMenu = useCallback((e) => {
+    // Only show on the desktop background, not on windows/modals
+    const target = e.target;
+    const isDesktopBg = target.classList.contains('background') ||
+      target.closest('.desktop-area') === target ||
+      target.classList.contains('desktop-area');
+    if (!isDesktopBg) return;
+
+    e.preventDefault();
+    setContextMenu({ visible: true, x: e.clientX, y: e.clientY });
+  }, []);
+
+  const closeContextMenu = useCallback(() => {
+    setContextMenu({ visible: false, x: 0, y: 0 });
+  }, []);
+
+  // Close context menu on any left click
+  useEffect(() => {
+    const handleClick = () => closeContextMenu();
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [closeContextMenu]);
 
   // Check for hash URLs on page load
   React.useEffect(() => {
@@ -532,7 +560,11 @@ function Desktop() {
           </List>
         }
       />
-      <React.Fragment>
+      <div
+        className="desktop-area"
+        onContextMenu={handleContextMenu}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 28, zIndex: 0 }}
+      >
         <Shortcuts
           openPortfolio={openPortfolio}
           openCV={openCV}
@@ -540,24 +572,107 @@ function Desktop() {
           openReader={openReader}
           openTranscriptions={openTranscriptions}
         />
-        {explorerOpened && (
-          <Portfolio
-            items={items}
-            closePortfolio={closePortfolio}
-            isMobile={isMobile}
-          />
-        )}
-        {cvOpened && <CV items={items} closeCV={closeCV} isMobile={isMobile} />}
-        {tunesOpened && (
-          <Tunes items={items} closeTunes={closeTunes} isMobile={isMobile} />
-        )}
-        {readerOpened && (
-          <Reader closeReader={closeReader} isMobile={isMobile} />
-        )}
-        {transcriptionsOpened && (
-          <Transcriptions closeTranscriptions={closeTranscriptions} isMobile={isMobile} />
-        )}
-      </React.Fragment>
+      </div>
+      {explorerOpened && (
+        <Portfolio
+          items={items}
+          closePortfolio={closePortfolio}
+          isMobile={isMobile}
+        />
+      )}
+      {cvOpened && <CV items={items} closeCV={closeCV} isMobile={isMobile} />}
+      {tunesOpened && (
+        <Tunes items={items} closeTunes={closeTunes} isMobile={isMobile} />
+      )}
+      {readerOpened && (
+        <Reader closeReader={closeReader} isMobile={isMobile} />
+      )}
+      {transcriptionsOpened && (
+        <Transcriptions closeTranscriptions={closeTranscriptions} isMobile={isMobile} />
+      )}
+
+      {/* Right-click context menu */}
+      {contextMenu.visible && (
+        <div style={{
+          position: 'fixed',
+          left: contextMenu.x,
+          top: contextMenu.y,
+          zIndex: 9999,
+        }}>
+          <Frame
+            bg="#c0c0c0"
+            boxShadow="out"
+            style={{ padding: '2px' }}
+          >
+            <List>
+              <List.Item style={{ fontSize: '11px' }} onClick={() => {}}>
+                Arrange Icons
+              </List.Item>
+              <List.Divider />
+              <List.Item style={{ fontSize: '11px' }} onClick={() => {
+                closeContextMenu();
+                setShowAccessDenied(true);
+              }}>
+                New Folder
+              </List.Item>
+              <List.Divider />
+              <List.Item style={{ fontSize: '11px' }} onClick={() => {
+                closeContextMenu();
+                handleOpenAboutModal();
+              }}>
+                Properties
+              </List.Item>
+              <List.Item style={{ fontSize: '11px' }} onClick={() => {
+                closeContextMenu();
+                window.location.reload();
+              }}>
+                Refresh
+              </List.Item>
+            </List>
+          </Frame>
+        </div>
+      )}
+
+      {/* Access Denied error dialog */}
+      {showAccessDenied && (
+        <S.layoutMain
+          isMobile={isMobile}
+          title="Error"
+          closeModal={() => setShowAccessDenied(false)}
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            margin: 0,
+            width: isMobile ? '85vw' : '380px',
+            zIndex: 10000,
+          }}
+          menu={[]}
+        >
+          <S.layoutMainContent bg="#c0c0c0" boxShadow="none">
+            <div style={{
+              display: 'flex',
+              padding: '20px 15px 10px 15px',
+              gap: '15px',
+              alignItems: 'flex-start',
+            }}>
+              <span style={{ fontSize: '32px', lineHeight: 1 }}>&#10060;</span>
+              <div style={{ fontSize: '11px' }}>
+                <p style={{ margin: '0 0 8px 0', fontWeight: 'bold' }}>Access Denied</p>
+                <p style={{ margin: 0 }}>
+                  You do not have permission to create items on this desktop. Please contact the system administrator.
+                </p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 15px 15px' }}>
+              <Button onClick={() => setShowAccessDenied(false)} style={{ minWidth: '75px' }}>
+                OK
+              </Button>
+            </div>
+          </S.layoutMainContent>
+        </S.layoutMain>
+      )}
     </ThemeProvider>
   );
 }
