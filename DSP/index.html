@@ -1,0 +1,137 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On The Elementary Principles of Digital Signal Processing: Introduction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        // Detect if we're in an iframe and apply embedded mode
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#what-is-signal-processing">What is Signal Processing?</a></li>
+                <li><a href="#brain-as-processor">Our Brains as Signal Processors</a></li>
+                <li><a href="#everyday-life">Signal Processing in Everyday Life</a></li>
+                <li><a href="#about-series">About This Series</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                On The Elementary Principles of Digital Signal Processing
+                <span class="subtitle">Introduction</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+        </header>
+
+        <section id="what-is-signal-processing" class="fade-in-section">
+            <h2>What is Signal Processing?</h2>
+            <p>
+                Signal processing is how we represent, analyse and modify signals. These are patterns that carry
+                information.
+            </p>
+        </section>
+
+        <section id="brain-as-processor" class="fade-in-section">
+            <h2>Our Brains are Signal Processors, by Nature!</h2>
+
+            <h3>Scenario 1: The Cocktail Party Effect</h3>
+            <p>
+                Imagine you are at a noisy gathering. You want to hear your friend speaking, but there's chatter all
+                around. Your brain somehow filters out noise, so you can understand your friend. Your brain is
+                performing signal processing, taking a complicated jumble of sound and discriminating the parts that
+                don't matter at will.
+            </p>
+
+            <h3>Scenario 2: Musical Transcription</h3>
+            <p>
+                When we learn harmony and ear training, we are effectively learning to retrieve intricate information
+                from complex signals. One could say the brain is a far more powerful signal processor for certain tasks
+                than modern computers. For instance, it was a rather trivial task for a composer like Mozart to
+                transcribe complex polyphonic chorale arrangements and masses on one hearing, most famously Gregorio
+                Allegri's <em>Miserere</em>, while this remains largely an unresolved problem in Automatic Music
+                Transcription (AMT).
+            </p>
+        </section>
+
+        <section id="everyday-life" class="fade-in-section">
+            <h2>But, Where's Signal Processing in Everyday Life?</h2>
+            <p>
+                To process a signal is to handle it with intention. We may wish to uncover what it contains, to reduce
+                what we deem irrelevant, or to reshape it for another purpose.
+            </p>
+            <p>
+                Clever signal processing is ubiquitous in today's world. When you Shazam a song, compress an image so it
+                fits on your phone, use Radar to track a flight, add digital reverb to your guitar track from either a
+                pedal or a plugin, or tune the radio, you are effectively utilising signal processing.
+            </p>
+            <p>
+                Signals can be complex, but hidden within them are patterns and relationships which one, as a signal
+                processing engineer, may exploit. Signal processing provides the mathematical tools to reveal said
+                structures, to isolate what matters, and to reconstruct information in a more useful form.
+            </p>
+        </section>
+
+        <section id="about-series" class="fade-in-section">
+            <h2>About This Series</h2>
+            <p>
+                This is the first blog entry from an upcoming series of articles <strong>"On The Elementary Principles
+                    of Digital Signal Processing"</strong>. The project's meant for a formalisation of some of my
+                thoughts on the subject, as well as a spur to divulge to whomever's interested in this fascinating
+                field.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="app.js"></script>
+</body>
+
+</html>

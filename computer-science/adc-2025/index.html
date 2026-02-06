@@ -1,0 +1,94 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presenting faust2clap at ADC 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../article-assets/style.css">
+    <link href="../../article-assets/lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#announcement">Announcement</a></li>
+                <li><a href="#poster">Poster</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                Presenting faust2clap
+                <span class="subtitle">at ADC 2025</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+            <p class="meta">York, UK</p>
+        </header>
+
+        <section id="announcement" class="fade-in-section">
+            <h2>Announcement</h2>
+            <p>
+                Hey folks! I'll be at the Audio Developer Conference (ADC) in Bristol next week presenting faust2clap.
+            </p>
+            <p>
+                If you're attending, come find me during the poster session! I'd love to discuss the project.
+            </p>
+        </section>
+
+        <section id="poster" class="fade-in-section">
+            <h2>Poster</h2>
+            <p>
+                <strong><a href="/faust2clap_ADC_Poster.pdf">Download the poster (PDF)</a></strong>
+            </p>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../article-assets/mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../../article-assets/lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../../article-assets/app.js"></script>
+</body>
+
+</html>

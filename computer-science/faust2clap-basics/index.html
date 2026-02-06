@@ -1,0 +1,172 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developing faust2clap - Chapter 1: faust2clap basics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../article-assets/style.css">
+    <link href="../../article-assets/lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#what-is-faust">What is Faust?</a></li>
+                <li><a href="#what-is-clap">What is CLAP?</a></li>
+                <li><a href="#faust2xx">faust2[…] tools</a></li>
+                <li><a href="#what-is-faust2clap">What is faust2clap?</a></li>
+                <li><a href="#dynamic">Dynamic Hot-Reload</a></li>
+                <li><a href="#ui">User Interface</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                Developing faust2clap
+                <span class="subtitle">Chapter 1: faust2clap basics</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+            <p class="meta">York, United Kingdom</p>
+        </header>
+
+        <section id="what-is-faust" class="fade-in-section">
+            <h2>What is Faust?</h2>
+            <p>
+                For those yet unfamiliar, the Faust programming language has been designed to provide audio signal
+                processing developers an orders of magnitude/exponentially faster way to develop and deploy their
+                digital signal processing algorithms, instruments, effects, etc. For a time where one required both
+                a C++ expert developer and a signal processing specialist to create efficient DSP algorithms and its
+                real-time implementations, Faust comes in to serve those familiar with the discipline of digital
+                signal processing to save hours worth of work on tedious efficient real-time implementations and
+                provides them an ecosystem to quickly test their DSP ideas both rapidly and intuitively.
+            </p>
+            <p>
+                Functional AUdio STream's workflow and ecosystem essentially consists of the programming language
+                and its own compiler, as well as several other components for testing, benchmarks and optimisation,
+                as well as running the resulting code on various other architectures.
+            </p>
+        </section>
+
+        <section id="what-is-clap" class="fade-in-section">
+            <h2>What is CLAP?</h2>
+            <p>
+                As stated on the official documentation, CLAP stands for CLever Audio Plugin, and it's an interface
+                that provides a stable Application Binary Interface, which is the means of communication between the
+                Host and Digital Audio Workstations. Unlike VST, it's free and open-source, and also tackles several
+                issues with the 25 year old technology in terms of simplicity, clarity and robustness.
+            </p>
+        </section>
+
+        <section id="faust2xx" class="fade-in-section">
+            <h2>faust2[…] tools</h2>
+            <p>
+                This is a set of scripts which utilise .dsp files as an input and thence can generate various output
+                for several architectures and platforms. Their standard name in the ecosystem is faust2xx where xx
+                is the target architecture.
+            </p>
+        </section>
+
+        <section id="what-is-faust2clap" class="fade-in-section">
+            <h2>So, what is faust2clap?</h2>
+            <p>
+                As you may have realised by now, faust2clap is a series of scripts that target the Clever Audio
+                Plugin (CLAP) architecture. The computer code for the static compilation can be found in
+                <code>clap-arch.cpp</code>. This script acts as a bridge between Faust-generated digital signal
+                processing code and the CLAP plugin API. It implements a CLAP plugin backend by wrapping Faust's
+                mydsp class (inherits of the virtual class dsp), which is the single c++ class faust programs are
+                described in.
+            </p>
+            <p>
+                The static build process is automated by a python script <code>faust2clap.py</code> which generates
+                and builds a static CLAP plugin from your .dsp source code. This means after a few seconds, you're
+                able to open any example faust code or your own dsp ideas to be tested as a plugin in your preferred
+                CLAP supported DAW.
+            </p>
+        </section>
+
+        <section id="dynamic" class="fade-in-section">
+            <h2>Dynamic Hot-Reload Solution</h2>
+            <p>
+                But hey, this could be done even faster! I developed a second tool which dynamically generates a
+                single plugin that can hot-reload .dsp files on the fly. This means you can test your dsp code on
+                a generated one size fits all "Faust Dynamic.clap" plugin on your preferred CLAP supported DAW while
+                you edit your faust code on a text editor. This provides a lightning-fast solution for testing and
+                usage to be carried out in the same environment in which the final plugin will be utilised, for
+                instance Reaper, FL Studio, etc.
+            </p>
+            <p>
+                Another use case is switching between different .dsp files, you may open freeverb.dsp and then jump
+                onto smoothDelay.dsp on the same audio track without batting an eye, parameter names will update
+                automatically and you'll be able to play with various effects on the fly.
+            </p>
+        </section>
+
+        <section id="ui" class="fade-in-section">
+            <h2>User Interface</h2>
+            <p>
+                Since a dedicated friendly JUCE GUI hasn't been developed yet, and there is no on-display preset
+                management system to alternate between various .dsp files, this has to be done from the terminal.
+                But I thought I'd make it temporarily more user-friendly, so I wrote an external python script that
+                generates a dedicated UI for file loading. It can be ran with the following commands (assuming
+                you're on the faust directory in your terminal):
+            </p>
+            <pre><code class="language-bash">cd architecture/clap
+python faust-hot-reload.py</code></pre>
+            <p>You should be able to see the following interface:</p>
+            <figure>
+                <img src="/faust-hot-reload-ui.png" alt="Faust Hot Reload UI" style="max-width: 400px;">
+                <figcaption>Figure 1: The Faust Hot Reload UI for loading .dsp files.</figcaption>
+            </figure>
+            <p><em>More chapters coming soon...</em></p>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../article-assets/mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../../article-assets/lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../../article-assets/app.js"></script>
+</body>
+
+</html>

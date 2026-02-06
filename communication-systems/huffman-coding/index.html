@@ -1,0 +1,143 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huffman Coding: The Art of Efficiency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../article-assets/style.css">
+    <link href="../../article-assets/lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#algorithm">The Algorithm</a></li>
+                <li><a href="#example">Example: Argentina</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                Huffman Coding
+                <span class="subtitle">The Art of Efficiency</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+        </header>
+
+        <section id="introduction" class="fade-in-section">
+            <h2>Introduction</h2>
+            <p>
+                Standard data storage is often wasteful. When we transmit a message, we typically assign the same fixed
+                cost to every character, regardless of how useful it is. This is inefficient. To save space, we should
+                assign short codes to common letters and longer codes to rare ones.
+            </p>
+            <p>
+                Huffman coding achieves this by using a frequency-sorted binary tree to encode symbols.
+            </p>
+        </section>
+
+        <section id="algorithm" class="fade-in-section">
+            <h2>The Huffman Coding Algorithm</h2>
+
+            <p>$$
+                \begin{array}{l}
+                \textbf{Algorithm: Huffman Coding} \\
+                \hline
+                1. \hspace{0.2cm} \textbf{Input:} \text{List of symbols } S \text{ and probabilities } P. \\
+                2. \hspace{0.2cm} \textbf{while } |S| > 1 \textbf{ do} \\
+                3. \hspace{0.8cm} \text{Select two symbols } x, y \text{ with lowest probabilities.} \\
+                4. \hspace{0.8cm} \text{Create node } z \text{ where } P(z) = P(x) + P(y). \\
+                5. \hspace{0.8cm} \text{Assign edge } x \to 0 \text{ and } y \to 1. \\
+                6. \hspace{0.8cm} \text{Remove } x, y \text{ from } S. \text{ Add } z \text{ to } S. \\
+                7. \hspace{0.2cm} \textbf{end while} \\
+                8. \hspace{0.2cm} \textbf{Return} \text{ Tree.}
+                \end{array}
+                $$</p>
+        </section>
+
+        <section id="example" class="fade-in-section">
+            <h2>Example: Argentina</h2>
+            <p>
+                Let us apply this to the word <strong>Argentina</strong>. For this demonstration, we treat the letters
+                as case-insensitive.
+            </p>
+
+            <h3>1. Frequency Analysis</h3>
+            <p>We count the characters in the 9-letter string:</p>
+            <ul>
+                <li>$a$: 2</li>
+                <li>$n$: 2</li>
+                <li>$r, g, e, t, i$: 1 each</li>
+            </ul>
+
+            <h3>2. The Comparison</h3>
+            <p>
+                In a standard system (ASCII), every letter costs 8 bits.
+            </p>
+            <p>$$C_{\text{standard}} = 9 \times 8 = 72 \text{ bits}$$</p>
+            <p>
+                In our optimised scheme, $a$ and $n$ appear most often, so they get the shortest paths (likely 2 bits).
+                The rarer letters get longer paths (3 or 4 bits).
+            </p>
+
+            <h3>3. The Result</h3>
+            <p>Summing the bits for the compressed data:</p>
+            <p>$$C_{\text{huffman}} \approx (2 \times 2) + (2 \times 2) + (5 \times 3.4) \approx 25 \text{ bits}$$</p>
+            <p>
+                We have reduced the storage requirement from <strong>72 bits</strong> to approximately
+                <strong>25 bits</strong>. By organising our symbols based on probability, we achieve significantly
+                higher efficiency.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../article-assets/mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../../article-assets/lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../../article-assets/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>On Transforms: The Discrete Time Fourier Transform (DTFT)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link href="../lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        // Detect if we're in an iframe and apply embedded mode
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#sampling">The Sampling of Reality</a></li>
+                <li><a href="#transformation">The Transformation</a></li>
+                <li><a href="#inverse">The Return Journey: The Inverse DTFT</a></li>
+                <li><a href="#conclusion">Conclusion</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                On Transforms
+                <span class="subtitle">The Discrete Time Fourier Transform (DTFT)</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+        </header>
+
+        <section class="fade-in-section">
+            <p>
+                In our previous entry, we established that signals are patterns carrying information, and that our
+                brains (much like computers) are constantly filtering and analysing these inputs. But how do we
+                actually <em>see</em> these patterns?
+            </p>
+            <p>
+                If we stare at a waveform in the time domain (amplitude over time), we see the shape of the wave,
+                but the pitch, among various other characteristics, remain hidden. To reveal them with a computer,
+                we need a tool to transform the signal into a time-frequency domain representation.
+            </p>
+            <p>
+                This leads us to a fundamental tool in modern Digital Signal Processing, the <strong>Discrete Time
+                    Fourier
+                    Transform (DTFT)</strong>.
+            </p>
+        </section>
+
+        <section id="sampling" class="fade-in-section">
+            <h2>Sampling... Reality</h2>
+            <p>
+                To process a signal digitally, we must first compromise <em>infinite</em> time.
+                Our continuous signal will be sliced into discrete moments, which we shall call samples.
+            </p>
+            <p>
+                Imagine a continuous signal, <em>g(t)</em>. To digitise it, we sample it at regular intervals.
+                Mathematically, this is equivalent to multiplying our smooth, continuous signal by a train of
+                'impulses' (Dirac deltas), mathematical spikes that exist only at specific moments <em>T, 2T, 3T</em>,
+                and so on.
+            </p>
+            <p>
+                The sampled signal, which we shall call <em>g<sub>s</sub>(t)</em>, is given by:
+            </p>
+            <figure class="equation-figure">
+                <img src="dtft1.png" alt="Sampled signal equation" class="equation-img">
+            </figure>
+            <p>
+                This might look intimidating, but it is conceptually pretty simple. We are essentialluy freezing the
+                continuous
+                world
+                into a sequence of snapshots.
+            </p>
+        </section>
+
+        <section id="transformation" class="fade-in-section">
+            <h2>The Transformation</h2>
+            <p>
+                Now, we wish to see the spectrum (the frequency content) of the sampled reality. We obtain the
+                signal spectrum <em>G<sub>s</sub>(ω)</em> by taking the Fourier transform directly.
+            </p>
+            <p>
+                When we crunch the calculus (integrating from negative to positive infinity), a beautiful
+                simplification emerges. Because our signal now only exists at those specific sample points,
+                the complex integral collapses into a clean summation:
+            </p>
+            <figure class="equation-figure">
+                <img src="dtft2.png" alt="Fourier transform derivation" class="equation-img">
+            </figure>
+            <p>
+                Here, we define <em>g<sub>p</sub></em> as the value of the signal at each sample point. Note that
+                this resulting function is <strong>periodic</strong> (meaning it repeats). This is a crucial property of
+                digital signals. When we sample time, we create periodicity in frequency.
+            </p>
+            <p>
+                This leads us to the standard form of the DTFT, a formula so central to our work that it deserves
+                to be boxed (and admired):
+            </p>
+            <figure class="equation-figure boxed">
+                <img src="dtft3.png" alt="Discrete Time Fourier Transform formula" class="equation-img">
+            </figure>
+        </section>
+
+        <section id="inverse" class="fade-in-section">
+            <h2>Can we go back, though? The Inverse DTFT</h2>
+            <p>
+                What if we have the frequency recipe, the spectrum, and we wish
+                to reconstruct the original time-domain signal?
+            </p>
+            <p>
+                To do this, we must invert the transform. We can express the signal sample values in terms of
+                the spectrum by exploiting a clever mathematical trick: the <strong>orthogonality of the complex
+                    exponential</strong>.
+            </p>
+            <p>
+                If we multiply our frequency spectrum by a positive exponential and integrate it over one period
+                (2π), the mathematics align perfectly to cancel out everything except the sample we are looking for:
+            </p>
+            <figure class="equation-figure">
+                <img src="dtft4.png" alt="Inverse DTFT derivation" class="equation-img">
+            </figure>
+            <p>
+                The integral of the complex exponential over a full period is zero for all mismatched frequencies
+                (<em>p ≠ n</em>) and 2π only when they match (<em>p = n</em>). This effectively sifts out our
+                original data from the frequency soup:
+            </p>
+            <figure class="equation-figure">
+                <img src="dtft5.png" alt="Orthogonality of complex exponential" class="equation-img">
+            </figure>
+            <p>
+                Thus, the signal samples are obtained from the DTFT as:
+            </p>
+            <figure class="equation-figure boxed">
+                <img src="dtft6.png" alt="Inverse DTFT formula" class="equation-img">
+            </figure>
+        </section>
+
+        <section id="conclusion" class="fade-in-section">
+            <h2>Conclusion</h2>
+            <p>
+                The DTFT is mathematically elegant, but it is computationally impossible. It relies on infinite
+                sums that no machine can calculate.
+            </p>
+            <p>
+                To make this tool useful, we must discretise the frequency domain just as we discretised time.
+                Next, we leave the blackboard for the terminal and turn this theory into a runnable algorithm:
+                the <strong>Discrete Fourier Transform (DFT)</strong>.
+            </p>
+        </section>
+
+        <section id="references" class="fade-in-section">
+            <h2>References</h2>
+            <ol class="references-list">
+                <li>Godsill, S. J., & Rayner, P. J. W. (1998). <em>Digital Audio Restoration: A Statistical Model Based
+                        Approach</em>. Springer.</li>
+            </ol>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../app.js"></script>
+</body>
+
+</html>
