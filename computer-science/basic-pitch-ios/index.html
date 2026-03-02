@@ -1,0 +1,130 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why I moved from on-device CoreML to server-based transcription</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../article-assets/style.css">
+    <link href="../../article-assets/lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">The Original Plan</a></li>
+                <li><a href="#problem">The Problem</a></li>
+                <li><a href="#solution">The Solution</a></li>
+                <li><a href="#implementation">Implementation</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                Rethinking Basic Pitch Integration
+                <span class="subtitle">For an iOS Chord Recognition App</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+            <p class="meta">York, UK</p>
+        </header>
+
+        <section id="introduction" class="fade-in-section">
+            <h2>The Original Plan</h2>
+            <p>
+                In building an iOS app that identifies chords from audio, the original plan was to run the entire
+                transcription process on-device using Apple's CoreML. Since Spotify's Basic Pitch provides a trained
+                neural network for note detection, it seemed natural to convert the model and execute it directly on
+                the phone. In principle this would have given a fully offline system.
+            </p>
+        </section>
+
+        <section id="problem" class="fade-in-section">
+            <h2>The Problem</h2>
+            <p>
+                Once the CoreML model was examined more carefully, the picture changed. The exported model does not
+                expect a mel spectrogram. Instead it expects a fixed packet of 43,844 raw audio samples at 22,050 Hz,
+                which corresponds to about two seconds of waveform. In return it produces three tensors containing
+                onset, frame and pitch-bend probabilities over 172 time steps × 88 pitches. These are only intermediate
+                signals in the original Python version.
+            </p>
+            <p>
+                The issue is that the Python implementation of Basic Pitch includes a non-trivial post-processing
+                stage. This stage smoothes the probability maps, merges frames into coherent notes, applies onset
+                heuristics, removes spurious activations and finalises timing. None of this is present in the CoreML
+                package. Rebuilding the full post-processing faithfully inside Swift is possible in theory, but
+                extremely brittle in practice. The absence of these steps led to unstable note detection that made
+                chord inference unreliable.
+            </p>
+        </section>
+
+        <section id="solution" class="fade-in-section">
+            <h2>The Solution</h2>
+            <p>
+                For this reason the project is now migrating the transcription step to a small server. The server
+                will run the official Python Basic Pitch code, which contains the complete and correct signal path.
+                The iOS app will send audio, receive clean symbolic note events, and handle the chord analysis locally.
+                This arrangement avoids the complexity of re-implementing the missing internals and yields results
+                that match the proven Python version precisely.
+            </p>
+        </section>
+
+        <section id="implementation" class="fade-in-section">
+            <h2>Implementation</h2>
+            <p>
+                The plan is straightforward. A lightweight API receives audio, runs the standard Basic Pitch pipeline
+                and returns note events as JSON. The latency is small. On typical hardware, even multi-minute audio
+                takes roughly one second to process. Once a stable local transcription solution is developed, the
+                dependency on the server can be removed, but for now this approach provides a reliable baseline for
+                harmonic analysis without compromising accuracy.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../article-assets/mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../../article-assets/lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../../article-assets/app.js"></script>
+</body>
+
+</html>

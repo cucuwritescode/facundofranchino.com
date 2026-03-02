@@ -1,0 +1,170 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is Velvet Noise?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../article-assets/style.css">
+    <link href="../../article-assets/lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#mathematical">Mathematical Structure</a></li>
+                <li><a href="#efficiency">Efficiency and Reverberation</a></li>
+                <li><a href="#decorrelation">Decorrelation Applications</a></li>
+                <li><a href="#summary">Summary</a></li>
+                <li><a href="#references">References</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                Velvet Noise
+                <span class="subtitle">A Technical Overview</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+            <p class="meta">Helsinki, Finland</p>
+        </header>
+
+        <section id="introduction" class="fade-in-section">
+            <h2>Introduction</h2>
+            <p>
+                Velvet noise is a sparse sequence of impulses whose spacing is randomised about a fixed mean interval.
+                It provides an efficient means of generating smooth, natural-sounding textures from minimal data,
+                forming the basis of several modern artificial reverberation and decorrelation algorithms.
+            </p>
+        </section>
+
+        <section id="mathematical" class="fade-in-section">
+            <h2>Mathematical Structure</h2>
+            <p>Formally, the sequence of impulse times is defined as:</p>
+            <p>$$t_n = nT + \delta_n$$</p>
+            <p>where:</p>
+            <ul>
+                <li>$T$ is the mean period between impulses,</li>
+                <li>$\delta_n$ is a zero-mean random deviation, and</li>
+                <li>$n$ is the impulse index.</li>
+            </ul>
+            <p>The resulting signal is:</p>
+            <p>$$v(t) = \sum_{n} a_n \, \delta(t - t_n)$$</p>
+            <p>
+                where $a_n \in \{-1, +1\}$ are randomly assigned amplitudes.
+            </p>
+            <p>
+                At low densities, this produces isolated clicks. As the density $\lambda = 1/T$ increases, the ear
+                perceives a continuous texture rather than discrete impulses. The effect resembles a smooth hiss,
+                although its energy is carried by far fewer samples than white noise.
+            </p>
+            <p>In discrete time, the signal is commonly implemented as:</p>
+            <p>$$v[n] = \sum_{k} a_k \, \delta[n - n_k]$$</p>
+            <p>
+                with event indices $n_k = kN + \epsilon_k$, where $N = \mathrm{round}(f_s T)$, $f_s$ is the sampling
+                rate, and $\epsilon_k$ are small integer jitters.
+            </p>
+        </section>
+
+        <section id="efficiency" class="fade-in-section">
+            <h2>Efficiency and Reverberation</h2>
+            <p>
+                The efficiency of velvet noise arises from its sparsity. Because most of the samples are zero, it can
+                synthesise large, diffuse sound fields with very little computation.
+            </p>
+            <p>
+                When the impulses are shaped by filters or multiplied by a decaying envelope $e^{-\alpha t}$, the
+                output resembles the fading reflections of an acoustic space. From these minimal elements one can
+                construct the perceptual illusion of continuous decay, allowing digital systems to recreate realistic
+                reverberant behaviour.
+            </p>
+        </section>
+
+        <section id="decorrelation" class="fade-in-section">
+            <h2>Decorrelation Applications</h2>
+            <p>
+                Velvet noise also functions as a <strong>decorrelation signal</strong>. Two independent sequences,
+                each defined by distinct random deviations $\delta_n$, are nearly uncorrelated yet perceptually
+                similar. When applied to multiple audio channels, this property disrupts coherence without
+                introducing tonal colouration, producing a natural stereo or surround diffusion.
+            </p>
+        </section>
+
+        <section id="summary" class="fade-in-section">
+            <h2>Summary</h2>
+            <p>
+                Velvet noise provides a compact, perceptually smooth foundation for artificial reverberation and
+                spatial diffusion. It demonstrates how precisely constrained randomness can produce stability and
+                realism in audio processing.
+            </p>
+        </section>
+
+        <section id="references" class="fade-in-section references">
+            <h2>References</h2>
+            <ol>
+                <li>Fagerström, J. (2025). <em>Velvet Noise in Audio Processing</em> (Doctoral Thesis). Aalto
+                    University.</li>
+                <li>Välimäki, V., & Schlecht, S. J. (2021). "Fifty Years of Artificial Reverberation." <em>Applied
+                        Sciences</em>, 11(7), 3140.</li>
+                <li>Karjalainen, M., & Järveläinen, H. (1999). "Reverberation Modelling Using Velvet Noise."
+                    <em>Proceedings of the International Conference on Digital Audio Effects (DAFx)</em>.</li>
+                <li>Fagerström, J., Meyer-Kahlen, N., Schlecht, S. J., & Välimäki, V. (2024). "Binaural
+                    Dark-Velvet-Noise Reverberator." <em>Proceedings of the 27th International Conference on Digital
+                        Audio Effects (DAFx24)</em>.</li>
+                <li>Schlecht, S. J., & Habets, E. A. P. (2020). "Feedback Delay Networks: Echo Density and Mixing Time."
+                    <em>IEEE Transactions on Audio, Speech, and Language Processing</em>, 28, 1837–1849.</li>
+                <li>Välimäki, V., & Parker, J. D. (2020). "Reverberation Algorithms and Their Applications."
+                    <em>Acoustics Today</em>, 16(4), 40–49.</li>
+            </ol>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../article-assets/mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../../article-assets/lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../../article-assets/app.js"></script>
+</body>
+
+</html>

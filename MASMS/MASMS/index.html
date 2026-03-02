@@ -1,0 +1,1260 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emulating Space and Designing New Ones: From Schroeder to Eno-Lanois</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Prism.js for syntax highlighting (Local for offline access) -->
+    <link href="lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        // Detect if we're in an iframe and apply embedded mode
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a></li>
+                <li><a href="#historical">2. Historical Foundations</a></li>
+                <li><a href="#models">3. System Models and Implementation</a></li>
+                <li><a href="#validation">4. System Validation and Analysis</a></li>
+                <li><a href="#musical-application">5. Musical Application</a></li>
+                <li><a href="#future-work">6. Future Work</a></li>
+                <li><a href="#conclusion">7. Conclusion</a></li>
+                <li><a href="#acknowledgements">Acknowledgements</a></li>
+                <li><a href="#references">References</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                Emulating Space and Designing New Ones
+                <span class="subtitle">From Schroeder to Eno-Lanois</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+        </header>
+
+        <section id="introduction" class="fade-in-section">
+            <h2>1. Introduction</h2>
+            <p>
+                One may define reverberation simply as the persistence of sound in a room. Thence, artificial
+                reverberation is the field of study in which researchers write algorithms that emulate such natural
+                acoustic phenomena, whilst also exploring new and unforeseen timbres. If written with real-time use in
+                mind, we therefore have to consider the computational efficiency of implementing such algorithms for a
+                computer program to execute quickly.
+            </p>
+
+
+            <p>
+                This article explores the topological evolution of recursive reverberation in the Faust [24]
+                programming language. It implements and
+                compares four distinct architectures: a Switchable Feedback Delay Network, a Nested Allpass Loop, a
+                Cascaded
+                Scattering Delay Network (CSDN), and an Eno-Lanois inspired Shimmer built on the previous CSDN
+                architecture.
+                Demonstrating a clear progression from classic room emulation techniques to musically-informed design.
+            </p>
+        </section>
+
+        <section id="historical" class="fade-in-section">
+            <h2>2. Historical Foundations</h2>
+            <p>
+                The FDN topology represents a sophisticated evolution of recursive filtering. Early foundations were
+                laid by Schroeder [2] (1962), who presented the first delay-line based artificial reverberation
+                algorithm.
+
+            </p>
+            <h3 id="schroeder">Schroeder's Reverberator</h3>
+            <figure>
+                <img src="latex_diagrams/schroeder_reverberator.png" alt="Schroeder Reverberator Block Diagram">
+                <figcaption>Figure 1: Block Diagram of Schroeder’s pioneering reverberator.</figcaption>
+            </figure>
+
+            <p>
+                On the right side, an increase in echo density by connecting Allpass filters in series. </p>
+
+            <figure>
+                <img src="latex_diagrams/schroeder_timefreq.png" alt="Schroeder Time-Frequency Representation">
+                <figcaption>Figure 2: Time-frequency domain representation of the Schroeder reverberator stages.
+                </figcaption>
+            </figure>
+            <h3 id="moorer">Moorer's Extensions</h3>
+            <p>
+                Moorer took Schroeder’s designs up a notch by inserting one-pole filters into delay loops to
+                control reverberation time as function of frequency. This yielded for a less metallic and thus
+                more natural sound. He also added a FIR filter to model early reflections.
+            </p>
+
+            <figure>
+                <img src="latex_diagrams/LPFCFilter.png" alt="Low Pass Feedback Comb Filter">
+                <figcaption>Figure 3: Block diagram of the low pass feedback comb filter presented in J. Moorer
+                    [4],
+                    in 1978.</figcaption>
+            </figure>
+
+            <details class="code-details">
+                <summary>A Modern version of the Moorer Reverb on the Faust Programming Language</summary>
+                <div class="faust-embed">
+                    <pre><code class="language-faust">declare name "Modern Moorer Reverb";
+declare author "Facundo Franchino";
+declare description "implementation of Moorer's 1978 design [4] using modern Faust arrays";
+
+import("stdfaust.lib");
+//controls
+t60 = hslider("Reverb Time [unit:s]", 2.0, 0.1, 10.0, 0.1);
+damp = hslider("HF Damping [0-1]", 0.4, 0, 0.99, 0.01);
+
+//data is the Boston Symphony Hall Simulation
+//these values are taken directly from Moorer's 1978 paper [4] "About This Reverberation Business".
+//they represent the first 18 discrete reflections of Boston Symphony Hall.
+er_times = (
+    0.0043, 0.0215, 0.0225, 0.0268, 0.0270, 0.0298, 
+    0.0458, 0.0485, 0.0572, 0.0587, 0.0595, 0.0612, 
+    0.0707, 0.0708, 0.0726, 0.0741, 0.0753, 0.0797
+);
+
+er_gains = (
+    0.841, 0.504, 0.491, 0.379, 0.380, 0.346, 
+    0.289, 0.272, 0.192, 0.193, 0.217, 0.181, 
+    0.180, 0.181, 0.176, 0.142, 0.167, 0.134
+);
+//comb filter delay times, Moorer's recommendation for "good" room
+comb_times = (0.050, 0.056, 0.061, 0.068, 0.072, 0.078);
+
+//prcessing blocks
+
+//single er tap
+tap(i) = _ @ (samps) * gain
+with {
+    samps = ba.take(i+1, er_times) * ma.SR;
+    gain  = ba.take(i+1, er_gains);
+};
+
+//low-pass feedback comb filter
+lbcf(dt_sec) = (+ : de.delay(65536, samps)) ~ (*(g) : filter)
+with {
+    samps = dt_sec * ma.SR;
+    //calc feedback gain based on T60
+    g = pow(0.001, dt_sec / t60);
+    //1-pole lowpass
+    filter = _ : (+ : _ * (1-damp)) ~ * (damp);
+};
+
+//allpass filter, for final diffusion
+apf(dt_sec, g) = (+ <: (de.delay(65536, samps), *(-g))) ~ *(g) : mem, _ : +
+with {
+    samps = dt_sec * ma.SR;
+};
+//main arch
+process = _ <: (earlyReflections : combBank : allpassChain) :> stereoOut
+with {
+    //tapped delay line (18 taps)
+    //scaled to prevent summing distortion
+    earlyReflections = _ <: par(i, 18, tap(i)) :> * (0.15);
+    //parallel comb filters (6 combs)
+    combBank = _ <: par(i, 6, lbcf(ba.take(i+1, comb_times))) :> _;
+    //series allpass (diffusion)
+    allpassChain = apf(0.006, 0.7);
+    //output
+    stereoOut = *(0.9) <: _,_;
+};</code></pre>
+                </div>
+            </details>
+
+            <div class="audio-example">
+                <h3>Schroeder vs Moorer</h3>
+                <div class="audio-grid">
+                    <div class="audio-item">
+                        <span class="audio-label">Dry Snare:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/Dry_snare.wav"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Schroeder Reverb:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/Snar_sch_stereo.wav"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Moorer Reverb:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/Snar_moo_stereo.wav"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 id="fdn">Feedback Delay Networks (FDN)</h3>
+            <p>
+                An FDN couples parallel delay lines through a feedback matrix,
+                rapidly increasing echo density while maintaining stability.
+            </p>
+            <p>
+                The crucial leap toward the FDN was Gerzon’s [14] (1971) proposal of "orthogonal matrix
+                feedback." Gerzon identified that to achieve a continuous stereo spread without instability, the
+                feedback matrix must preserve the total energy of the system.
+            </p>
+
+            <figure>
+                <img src="latex_diagrams/gerzon_algorithm.png" alt="Gerzon's Algorithm">
+                <figcaption>Figure 4: Block Diagram of M. Gerzon’s seminal Algorithm.</figcaption>
+            </figure>
+
+            <p>
+                This concept was later generalised for computer music by Stautner and Puckette [5] (1982) and
+                further refined by Jot and Chaigne [17] (1991).
+            </p>
+
+
+            <div class="video-container">
+                <video controls loop muted src="video/fdn_movie_schlecht.mp4"></video>
+                <p class="caption">Figure 5: Echo build-up animation by Sebastian J. Schlecht [6].</p>
+            </div>
+        </section>
+
+        <section id="models" class="fade-in-section">
+            <h2>3. System Models and Implementation</h2>
+            <p>
+
+            </p>
+
+            <h3>3.1. Model A: The Generalised Feedback Delay Network</h3>
+            <figure>
+                <img src="latex_diagrams/switchablediffFDN.png" alt="Switchable Diffusivity FDN">
+                <figcaption>Figure 6: Block diagram of the implemented Switchable Diffusivity FDN.</figcaption>
+            </figure>
+
+            <p>
+                The control model implements the classic Feedback Delay Network (FDN) topology proposed by Stautner and
+                Puckette [5] and later refined by Julius Smith [19]. This structure generalises the Schroeder
+                reverberator by coupling multiple parallel delay
+                lines through a mixing matrix, modelling a room as a set of coupled resonant modes.
+            </p>
+
+            <h4>Physical Basis and Equations:</h4>
+            <p>
+                In a physical enclosure, sound energy decays exponentially due to air absorption and wall reflection
+                losses. As previously shown, the FDN simulates this by recirculating audio through $N$ delay lines. The
+                system state is defined by the update equation:
+            </p>
+            <p>
+                $$x(n+1)= D \cdot [in(n)+A \cdot x(n)]$$
+            </p>
+            <p>
+                where $x(n)$ represents the delay line state vector, $D$ is the diagonal delay matrix and $A$ is the
+                unitary feedback matrix.
+            </p>
+            <p>
+                To guarantee a natural decay time ($T_{60}$) the gain per sample $g_i$ for each delay line of length
+                $M_i$ is calculated using the formula derived from Sabine’s equation [12]:
+            </p>
+            <p>
+                $$g_i = 10^{-3 M_i T_s / T_{60}}$$
+            </p>
+            <p>
+                where $T_s=1/f_s$ is the sampling period.
+            </p>
+
+            <h4>Discretisation & implementation:</h4>
+            <p>
+                A 4-channel system ($N=4$) was implemented using Faust.
+            </p>
+
+            <figure>
+                <img src="fdn_4x4.png" alt="4x4 FDN Matrix Coupler" style="max-width: 400px;">
+                <figcaption>Figure 7: A $4 \times 4$ matrix coupler structure, representing the core feedback
+                    architecture.</figcaption>
+            </figure>
+
+            <h5>The Scattering Matrix:</h5>
+            <figure>
+                <img src="latex_diagrams/feedback_matrices.png" alt="Feedback Matrices">
+                <figcaption>Figure 8: Most common scalar matrices (inspired by Sebastian J. Schlecht's paper [9] on the
+                    FDNToolbox).</figcaption>
+            </figure>
+            <p>
+                A Hadamard matrix (hadamard (4)) was chosen for the mixing matrix $A$. As shown in the reference table,
+                said matrix is orthogonal and requires only additions and subtractions ($O(N \log N)$
+                operations), making it computationally efficient. A normalisation gain of 0.5 ($1/\sqrt{4}$) is applied
+                to satisfy the “lossless” criterion ($A^H A=1$) required for infinite sustain.
+            </p>
+
+            <h5>Mode switching (time variance):</h5>
+            <p>
+                The implementation introduces a “Generalised branch” that allows switching between two modes:
+            </p>
+            <ul>
+                <li><strong>1. Standard mode:</strong> a static integer delay $z^{-M}$.</li>
+                <li><strong>2. Allpass Mode:</strong> a modulated allpass filter.</li>
+            </ul>
+            <p>
+                In the Allpass Mode, a standard Schroeder allpass coefficient ($g=0.5$) introduced excessive metallic
+                colouration. To achieve the intended “lush” characteristic, the allpass coefficient was reduced to
+                $g=0.1$. This configuration functions primarily as a Modulated Delay Line, providing the necessary
+                time-variance to suppress eigenmodes, while retaining a small amount of phase diffusion.
+            </p>
+            <details class="code-details">
+                <summary>Code Implementation for a Generalised Feedback Delay Network in Faust</summary>
+                <div class="faust-embed">
+                    <pre><code class="language-faust">declare name "Switchable Diffusivity Feedback Delay Network";
+declare version     "1.0.1";
+declare author      "Facundo Franchino";
+
+import("stdfaust.lib");
+
+//controls
+mode = hslider("engine mode [style:radio{'standard':0;'allpass':1}]", 0, 0, 1, 1) : int;
+
+t60 = hslider("decay t60 [unit:s]", 2.0, 0.1, 10.0, 0.1);
+damp = hslider("hf damping [0-1]", 0.4, 0, 0.9, 0.01);
+wet = hslider("dry/wet", 0.5, 0, 1, 0.01);
+
+//modulation settings
+//note,lowered default speed for a smoother, less "wobbly" drift
+modSpeed = hslider("mod speed [hz]", 0.2, 0.01, 5.0, 0.01);
+modDepth = hslider("mod depth [samp]", 8, 0, 50, 0.1);
+
+//helper functions
+
+op(g) = _ : (+ : _ * (1-g)) ~ * (g);
+
+hadamard(2) = si.bus(2) <: +, -;
+hadamard(4) = par(i, 2, hadamard(2)) : ro.interleave(2,2) : par(i, 2, hadamard(2));
+
+prime(0) = 1973; prime(1) = 2693; prime(2) = 3251; prime(3) = 3943;
+
+//input diffuser
+diffuser = 
+    ap(113, 0.7) : ap(157, 0.7) : ap(337, 0.6) : ap(541, 0.5) 
+with {
+    ap(size, g) = (+ <: (de.delay(2048, size), *(g))) ~ *(-g) : mem, _ : +;
+};
+
+//core engine
+
+//generalised branch
+generalisedBranch(idx, phaseOffset) = _ <: ba.selectn(2, mode, pathDelay, pathAllpass) : _
+with {
+    N = prime(idx);
+    
+    //mode 0,static delay
+    pathDelay = de.delay(65536, N);
+    
+    //mode 1,modulated allpass
+    apGain = 0.1;
+    
+    localLfo = os.oscp(modSpeed, phaseOffset) * modDepth;
+    
+    //structure, schroeder allpass with variable delay length
+    pathAllpass = (+ <: (de.fdelay(65536, N-1+localLfo), *(apGain))) ~ *(-apGain) : mem, _ : +;
+};
+
+//main fdn loop
+fdn = (inputPath : opPath : branchPath : hadamardPath : normHadamard : decay : feedbackLimiter) ~ si.bus(4) : delCompensation
+with{
+    inputPath = ro.interleave(4, 2) : par(i, 4, (_, _) :> _);
+    opPath = par(i, 4, op(damp));
+    
+    //decorrelation, phases spread by 90 degrees (pi/2)
+    branchPath = par(i, 4, generalisedBranch(i, 2*ma.PI * (i/4)));
+    
+    hadamardPath = hadamard(4);
+    normHadamard = par(i, 4, _ * 0.5);
+    
+    g(i) = pow(0.001, (prime(i)/ma.SR) / t60) : min(0.995); 
+    decay = par(i, 4, *(g(i)));
+    
+    feedbackLimiter = par(i, 4, ma.tanh);     
+    delCompensation = par(i, 4, mem);
+};
+
+stereoToQuad = _,_ <: _,_,_,_;
+outputGain = *(0.5);
+
+process = _,_ <: 
+    (*(1-wet), *(1-wet)), 
+    (diffuser, diffuser : stereoToQuad : fdn :> _,_ : outputGain, outputGain : *(wet), *(wet)) 
+    :> _,_;</code></pre>
+                </div>
+            </details>
+
+            <table class="preset-table">
+                <thead>
+                    <tr>
+                        <th>Preset Name</th>
+                        <th>Description</th>
+                        <th>Primary Parameters</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Small Room</td>
+                        <td>A tight, clean space with minimal echo overlap.</td>
+                        <td>T60: 1.5s, Mode: Standard, Dry/Wet:1.00, HF Damping:0.12</td>
+                    </tr>
+                    <tr>
+                        <td>Campus Tunnel</td>
+                        <td>Lush, diffused tail with high MD.</td>
+                        <td>T60: 6.2s, Mode: Allpass, HF Damping: 0, Mod Depth:11, Mod Speed:1.35</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3.2. Model B: The Nested Allpass Loop</h3>
+            <figure>
+                <img src="latex_diagrams/nestedKeith.png" alt="Nested Keith Barr Topology">
+                <figcaption>Figure 9: Block Diagram of the Nested Keith Barr Topology.</figcaption>
+            </figure>
+
+            <p>
+                Inspired by the hardware architectures of Keith Barr, this model departs from parallel topology
+                in favour of a Serial Cascade (or “Big Loop”) topology. While Model A relies on a unitary matrix to mix
+                parallel delay lines, Model B relies on the geometric growth of echo density that occurs when allpass
+                filters are connected in series.
+            </p>
+
+            <h4>Physical Basis and Equations:</h4>
+            <p>
+                In real rooms, acoustic diffusion occurs when a single reflection splits into multiple reflections upon
+                scattering from a surface. We simulate this scattering phenomenon by utilising the Schroeder [1] Allpass
+                Filter, defined by the difference equation:
+            </p>
+            <p>
+                $$y[n]=−gx[n]+x[n−D]+gy[n−D]$$
+            </p>
+
+            <figure>
+                <img src="latex_diagrams/schroeder_allpass.png" alt="Schroeder Allpass Filter">
+                <figcaption>Figure 10: Block Diagram of the Schroeder Allpass Filter in Direct Form II.</figcaption>
+            </figure>
+
+            <p>
+                Connecting these filters in series causes the impulse response density to multiply at every stage. A
+                single allpass creates a train of echoes, a second allpass convolves that train with another, squaring
+                the density ($N^2$). This creates the “dense smear” characteristic of vintage hardware plates.
+            </p>
+
+            <div class="audio-example">
+                <span class="audio-label">Model B Audio Examples:</span>
+                <div class="audio-grid">
+                    <div class="audio-item">
+                        <span class="audio-label">Static Impulse:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/Impulse_Barr.mp3"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Modulated Impulse:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/Impulse_Barr_Mod.mp3"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Snare Test:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/Snare_Barr.mp3"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Discretisation and implementation:</h4>
+            <p>
+                In <code>barrImplementation.dsp</code>, a “big loop” comprising five sequential sections was
+                constructed.
+            </p>
+            <p>
+                <strong>Distributed Injection:</strong> Unlike standard models where input enters only at the start, our
+                implementation injects the dry signal $x[n]$ after every section. This guarantees that the “bloom” of
+                the reverb begins immediately.
+            </p>
+            <p>
+                <strong>The Section:</strong> Each section is a composite block containing two modulated allpass filters
+                and one delay line in series.
+            </p>
+            <p>
+                <strong>The Feedback Path:</strong> The global feedback path passes through a dedicated filtering
+                section to colour the decay.
+            </p>
+
+            <details class="code-details">
+                <summary>Code for a Serial Allpass Cascade Architecture (Keith Barr Implementation)</summary>
+                <div class="faust-embed">
+                    <pre><code class="language-faust">declare name "NestedKeith";
+declare version "1.0";
+declare author "K. Barr, Facundo Franchino";
+declare description "nested allpass loop reverb based on Alesis hardware architecture";
+import("stdfaust.lib");
+//some utility functions first
+
+//a hardcoded list of prime numbers
+//these are used for delay lengths to prevent resonant ringing
+prime_list = (
+    113, 127, 139, 181, 263, 
+    347, 449, 563, 673, 797, 
+    907, 1013, 1123, 1237, 1361, 
+    1481, 1597, 1721, 1847, 1973
+);
+//helper to get a prime from our list
+get_prime(i) = ba.take(i+1, prime_list);
+
+//an lfo section
+//lfo controls
+lfoSpeed = hslider("LFO Speed [unit:Hz]", 0.5, 0.0, 5.0, 0.01) : si.smoo;
+lfoDepth = hslider("LFO Depth [unit:samps]", 10, 0, 50, 0.1) : si.smoo;
+
+//the lfo signal itself (sine)
+lfo = os.osc(lfoSpeed) * lfoDepth;
+
+//the modulated allpass filter
+//we use 'de.fdelay' (fractional delay) here.
+//standard 'de.delay' snaps to integers, which sounds bad when modulating.
+allpass(N, n, g) = (+ <: (de.fdelay(N, n-1+lfo), *(g))) ~ *(-g) : mem, _ : +;
+
+//A "section" consists of 2 allpasses in series + 1 delay
+//this creates a dense smear of the sound
+section(n1, n2) = allpass(65536, n1, 0.5) : allpass(65536, n2, 0.5) : de.delay(65536, n1+n2);
+
+//main reverb arch
+//build the chain of sections using sequence
+//this creates the "big loop" Barr describes
+//input 'x' is injected into the start of the chain.
+procMono(x) = x : (+ : chain) ~ feedback_path :> _
+with {
+    //5 sections in series
+    chain = seq(i, 5, section_wrapper(i, x));
+    
+    //helper to calculate delay times for the i-th section
+    section_wrapper(i, input_sig) = _ : section(p1, p2) <: input_helper
+    with {
+        //calculate indices roughly, 100 + 10*2^i
+        //we map these to our prime_list
+        idx_base = i * 2; 
+        p1 = get_prime(idx_base);
+        p2 = get_prime(idx_base + 1);
+        
+        //this is basically the recursive "tap", we pass the result to the next stage
+        //AND we mix in the original input 'x' again!!!
+        input_helper(signal_from_prev) = signal_from_prev + input_sig; 
+    };
+    //the feedback path (global feedback)
+    //taps the end of the chain and sends it back to the start
+    feedback_path = _ : section(get_prime(10), get_prime(11)) : *(feedback_slider);
+};
+
+//ui control
+feedback_slider = hslider("Feedback", 0.5, 0.0, 0.99, 0.01) : si.smoo;
+
+//split stereo input to 2 mono reverbs (stereo processing)
+process = _ <: par(i, 2, procMono) :> _,_;</code></pre>
+                </div>
+            </details>
+
+            <table class="preset-table">
+                <thead>
+                    <tr>
+                        <th>Preset Name</th>
+                        <th>Description</th>
+                        <th>Primary Parameters</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Alesis</td>
+                        <td>1980s sound</td>
+                        <td>FB: 0.45, LFO Speed: 1.5Hz, LFO Depth: 3.8 samps</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3.3. Model C: The Cascaded Scattering Delay Network (CSDN)</h3>
+            <figure>
+                <img src="latex_diagrams/cascaded_SDN.png" alt="Cascaded SDN">
+                <figcaption>Figure 11: Block Diagram of the Cascaded Scattering Delay Network (CSDN) algorithm.
+                </figcaption>
+            </figure>
+
+            <p>
+                Model C is a hybrid topology designed to solve the trade-off between low initial density and metallic
+                colouration. Inspired by the multi-channel research of Murphy et al. [13], it uses a Series-Parallel
+                architecture where multiple scattering matrices are placed in
+                series within a single feedback loop. This creates a “geometric” density buildup similar to Model B but
+                maintains the stability of an FDN.
+            </p>
+
+            <h4>Physical Basis and Equations:</h4>
+            <p>
+                This model relies on increasing the system’s Mixing Rate. By forcing the signal through multiple unitary
+                mixing matrices per recirculation, we minimise the “mixing time”. We utilise the Householder Reflection
+                Matrix ($A = I - 2vv^T$) for scattering, which is unitary and guarantees energy conservation.
+            </p>
+
+            <h4>Discretisation and implementation:</h4>
+            <p>
+                In the CSDN, the feedback loop contains a chain of 6 distinct processing
+                blocks:
+            </p>
+            <ul>
+                <li><strong>Static stages:</strong> banks of parallel delays feeding Householder matrices.</li>
+                <li><strong>Modulated Stages:</strong> delay lines modulated by LFOs in quadrature phase (0 and 90
+                    degree offset).</li>
+                <li><strong>Diffuser:</strong> a bank of allpass filters inserted mid-chain to increase echo density.
+                </li>
+            </ul>
+
+            <table class="preset-table">
+                <thead>
+                    <tr>
+                        <th>Preset Name</th>
+                        <th>Description</th>
+                        <th>Primary Parameters</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Thin Ice</td>
+                        <td>High clarity with fast mixing time for rhythmic precision.</td>
+                        <td>T60: 32.0, Dry/Wet: 1.00, Wobble Depth: 30.0, Air Absorption: 0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Music Forest</td>
+                        <td>Rich, dense reverberation with a smooth decay.</td>
+                        <td>T60: 50.0, Dry/Wet: 1.00, Wobble Depth: 24.3, Air Absorption: 0.90</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>3.4. Model D: The Cascaded Feedback Shimmer</h3>
+            <figure>
+                <img src="latex_diagrams/cascaded_shimmer.png" alt="Cascaded Feedback Shimmer">
+                <figcaption>Figure 12: Block Diagram of the Cascaded Feedback Shimmer algorithm.</figcaption>
+            </figure>
+
+            <p>
+                Model D extends the Cascaded topology to emulate the classic Eno-Lanois “Shimmer” effect, popularized by
+                the research of Sean Costello [10]. The basic idea
+                is to utilise a reverb in a feedback loop with a pitch shifter, resulting in a tail that goes up in
+                pitch and adds harmonic richness as it decays.
+            </p>
+
+            <h4>Physical Basis and Equations:</h4>
+            <p>
+                The Shimmer effect introduces a Frequency Shift Operator ($S$) into the feedback loop. For the classic
+                octave shimmer, this is expressed as: $S[\omega] = 2\omega$. As the signal recirculates, the spectrum is
+                iteratively stretched upwards.
+            </p>
+
+            <div class="audio-example">
+                <span class="audio-label">Model D Test:</span>
+                <div class="audio-player">
+                    <audio controls src="audio/results/Impulse_MyShimmer_vs_VShimmer_test.mp3"></audio>
+                </div>
+            </div>
+
+            <details class="code-details">
+                <summary>Code for a Cascaded Feedback Shimmer Algorithm in Faust</summary>
+                <div class="faust-embed">
+                    <pre><code class="language-faust">declare name        "Cascaded Feedback Shimmer Algorithm";
+declare version     "1.0";
+declare author      "Facundo Franchino";
+
+import("stdfaust.lib");
+//user controls
+//pre-delay section (tape style)
+//creates discrete echoes before the reverb bloom.
+echoTime = hslider("[1]Echo Time [ms]", 500, 0, 1000, 1) : si.smoo;
+echoFbk  = hslider("[1]Echo Feedback [0-1]", 0.4, 0.0, 0.9, 0.01);
+
+//reverb physics
+//t60, how long it takes for the sound to decay by 60db
+//damp, absorbs high frequencies in the tail (simulation of air absorption)
+t60      = hslider("[2]Decay T60 [s]", 10.0, 0.1, 60.0, 0.1);
+damp     = hslider("[2]Air Absorption [0-1]", 0.4, 0.0, 0.9, 0.01); 
+
+//shimmer controls
+//injects pitch-shifted signal back into the loop.
+//scale the max gain to 0.2 to prevent the feedback loop from "exploding"
+shimmerMix = hslider("[3]Shimmer Mix [0-1]", 0.0, 0.0, 1.0, 0.01) * 0.2; 
+pitchShift = hslider("[3]Shift [semitones]", 12, -12, 24, 1) : si.smoo;
+
+//output equaliser
+//a console-style eq to sculpt the final wet tone
+lowShelf   = hslider("[4]Low Shelf [dB]", 0.0, -20, 10, 0.1);
+lowFreq    = hslider("[4]Low Freq [Hz]", 150, 50, 500, 1);
+highShelf  = hslider("[4]High Shelf [dB]", -2.0, -20, 10, 0.1);
+highFreq   = hslider("[4]High Freq [Hz]", 6000, 2000, 15000, 1);
+
+//global settings
+wet      = hslider("[5]Dry/Wet", 0.5, 0, 1, 0.01);
+//modulation adds movement to the tail to prevent metallic ringing
+modSpeed = hslider("[5]Wobble Speed", 0.2, 0.0, 3.0, 0.01);
+modDepth = hslider("[5]Wobble Depth", 20.0, 0.0, 100.0, 0.1);
+
+//DSP components
+
+//simple feedback delay. the right channel is offset by 1% to create stereo width
+tapeDelay = (pathL, pathR)
+with {
+    maxDel = 48000; 
+    delSamps = echoTime * (ma.SR/1000);
+    pathL = (+ : de.fdelay(maxDel, delSamps)) ~ (*(echoFbk));
+    pathR = (+ : de.fdelay(maxDel, delSamps * 1.01)) ~ (*(echoFbk)); 
+};
+
+//standard low and high shelf filters for tonal shaping
+consoleEQ = fi.low_shelf(lowShelf, lowFreq) : fi.high_shelf(highShelf, highFreq);
+
+//uses windowed delay lines to pitch shift the audio in real-time
+//we use a locked tuning here (no prev detune blur idea) to make sure loop stays in key
+shimmerEngine = _ <: (shiftA, shiftB) :> _
+with {
+    window = 4096; xfade  = 2048;
+    shiftA = ef.transpose(window, xfade, pitchShift);
+    shiftB = ef.transpose(window, xfade, pitchShift);
+};
+
+//hard clips the signal if it exceeds -6db inside the shimmer loop
+safetyLimit = max(-0.5) : min(0.5);
+
+//cascaded topology setup
+
+//a list of 25 prime numbers for delay lengths
+//using primes prevents resonant frequencies from stacking up and thus getting a metallic sound
+t(0) = 871; t(1) = 1037; t(2) = 1205; t(3) = 297; t(4) = 467;
+t(5) = 884; t(6) = 173;  t(7) = 1456; t(8) = 799; t(9) = 361;
+t(10)= 1432; t(11)= 338; t(12)= 186;  t(13)= 1408; t(14)= 1014;
+t(15)= 23;   t(16)= 807; t(17)= 501;  t(18)= 1468; t(19)= 1102;
+t(20)= 11;   t(21)= 1119; t(22)= 1315; t(23)= 94;   t(24)= 1270;
+
+//mixing matrix (householder)
+//this scatters energy between the 5 channels without adding or losing volume
+householder = si.bus(5) <: (si.bus(5), (par(i,5,_):>_ * (0.38) <: si.bus(5))) : ro.interleave(5,2) : par(i,5,-);
+
+
+//cut high frequencies in the feedback loop
+shelfFilter(g) = _ : fi.lowpass(1, 18000 - (g * 14000));
+
+//allpass diffuser
+//smearing filter that increases echo density
+ap(len) = (+ <: (de.delay(4096, len), *(-0.6))) ~ *(0.6) : mem, _ : +;
+diffuser = par(i, 5, ap(223 + (i*50)));
+
+//topology stages
+//the following is a bank of 5 parallel delays followed by a mixer
+stage(offset) = par(i, 5, de.delay(65536, t(offset + i))) : householder;
+
+//add lfo modulation to the delay lines for chorusing
+stageMod(offset, phase) = modLine, par(i, 4, staticLine(i)) : householder
+with {
+    lfo = os.oscp(modSpeed, phase * 6.28) * modDepth;
+    modLine = de.fdelay(65536, t(offset) + lfo);
+    staticLine(i) = de.delay(65536, t(offset + 1 + i));
+};
+
+//cascade chain
+//the signal flows through 5 stages in series before recirculating
+//this creates massive echo density very quickly
+cascade = stage(0) : stageMod(5, 0.0) : diffuser : stage(10) : stage(15) : stageMod(20, 0.25);
+
+
+//main process
+process = _,_ <: (*(1-wet), *(1-wet)), (stereoProcess :> _,_ : *(wet), *(wet)) :> _,_
+with {
+    //input processing
+    //apply pre-delay, then sum to mono and distribute to 5 channels
+    //we attenuate by 0.25 to leave headroom for resonance
+    inputChain = _,_ : tapeDelay : (+ : *(0.25) <: si.bus(5));
+    
+    //calculate decay coefficient based on total loop time
+    avgLoop = 19500 + 2500;
+    g_decay = pow(0.001, (avgLoop/ma.SR) / t60);
+    
+    //the main reverb tank
+    tank = inputChain : (ro.interleave(5, 2) : par(i, 5, +)) ~ feedbackLogic
+    with {
+        feedbackLogic = cascade : feedbackSplit;
+        
+        //feedback split logic
+        //first path is normal reverb decay
+        //second path is shimmer injection, (pitch shifted & reinjected)
+        feedbackSplit(c1,c2,c3,c4,c5) = 
+            (c1,c2,c3,c4,c5 : par(i, 5, *(g_decay) : shelfFilter(damp))),
+            
+            //shimmer path
+            //sums channels, shifts pitch, filters out mud/fizz, and reinjects
+            (c1,c2,c3,c4,c5 :> *(shimmerMix) : shimmerEngine : safetyLimit 
+             : fi.lowpass(1, 3500) : fi.highpass(1, 200) <: si.bus(5))
+             
+            : ro.interleave(5, 2) : par(i, 5, +); 
+    };
+    
+    //output processing
+    //mix 5 internal channels down to stereo
+    //apply final eq
+    mix5to2 = route(5, 2, 1,1, 2,2, 3,1, 4,2, 5,1, 5,2);
+    stereoProcess = tank : mix5to2 : par(i, 2, *(0.33) : consoleEQ);
+};</code></pre>
+                </div>
+            </details>
+
+            <table class="preset-table">
+                <thead>
+                    <tr>
+                        <th>Preset Name</th>
+                        <th>Description</th>
+                        <th>Primary Parameters</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>The Pearl</td>
+                        <td>Inspired by the homonymous Eno-Lanois record. Quintessential shimmer.</td>
+                        <td>Echo Feedback: 0.5, Echo Time: 0, Shift: +12, Shimmer Mix: 0.17, Dry/Wet: 0.63, T60: 52, Air
+                            Absorption: 0.15</td>
+                    </tr>
+                    <tr>
+                        <td>Bowed Upright Bass</td>
+                        <td>Melody doubling reminiscent of bowed upright bass.</td>
+                        <td>Echo Feedback: 0.73, Echo Time: 0, Shift: -12, Shimmer Mix: 0.35, Low Freq: 448, Low Shelf:
+                            5.4, Dry/Wet: 0.63, T60: 42, Air Absorption: 0.15</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="validation" class="fade-in-section">
+            <h2>4. System Validation and Analysis</h2>
+            <h3>4.1. Energy of a FDN</h3>
+
+            <figure>
+                <img src="audio/results/Figure13_Stability.png" alt="Matrix Unitary Check (Stability)">
+                <figcaption>Figure 13: Matrix Unitary Check (Stability), Basic Feedback Delay Network.</figcaption>
+            </figure>
+            <p>
+                Figure 13 presents the energy of the FDN when fed with an impulse. Crucially, the energy stays strictly
+                below the theoretical unity gain line (red dashes). This confirms that the feedback matrix is lossless
+                and unconditionally stable; the reverb tail decays naturally without ever diverging, even at maximum
+                decay settings.
+            </p>
+            <h3>4.2. Mode 0 vs Mode 1 (Model A)</h3>
+            <figure>
+                <img src="audio/results/Figure14_Density_Comparison.png" alt="Time-domain density comparison">
+                <figcaption>Figure 14: Time-domain density (mode 0 vs mode 1), Model A.</figcaption>
+            </figure>
+            <p>
+                Figure 14 demonstrates the drastic difference between the “Standard” and “Allpass” architectures.
+            </p>
+            <ul>
+                <li><strong>Top (mode 0):</strong> this shows the sparse reflection pattern of a standard delay line.
+                    The spikes are far apart, which yields for a metallic, “chattery” sound where individual echoes are
+                    audible.</li>
+                <li><strong>Bottom (mode 1):</strong> by introducing allpass filters inside the loop, the echo density
+                    increases massively. The energy is smeared over time, filling the gaps between reflections. This
+                    yields for a much smoother and “lush” reverberation tail, effectively mitigating the flutter echoes
+                    seen in the standard model.</li>
+            </ul>
+
+            <div class="audio-example">
+                <span class="audio-label">Density Comparison:</span>
+                <div class="audio-grid">
+                    <div class="audio-item">
+                        <span class="audio-label">Standard Mode (0):</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/density_mode0.wav"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Allpass Mode (1):</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/density_mode1.wav"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>4.3. Model D vs ValhallaShimmer</h3>
+            <figure>
+                <img src="audio/results/Figure16_Shimmer_CQT.png" alt="Pitch shifting analysis (shimmer)">
+                <figcaption>Figure 15: Pitch shifting analysis (shimmer) (CQT comparison vs ValhallaShimmer).
+                </figcaption>
+            </figure>
+            <p>
+                To validate the spectral processing of Model D, I utilised a CQT spectrogram to visualise the pitch
+                trajectory. Figure 15 compares the proposed model (top) against the commercial reference ValhallaShimmer
+                (bottom), designed by Sean Costello [10]. Both spectrograms exhibit the characteristic “Octave Ladder”
+                structure, confirming that the
+                pitch
+                shifter is tracking perfectly. Subjectively, this rising accumulation of harmonics creates the
+                “blooming”
+                texture characteristic of the Eno-style shimmer.
+            </p>
+
+
+            <p>
+                A difference can be observed in the noise floor. Valhalla’s exhibits a denser “purple haze” between the
+                harmonic bands, suggesting a higher diffusion density or potentially a different windowing function in
+                the engine. The proposed Model D shows cleaner separation between harmonics, indicating that while the
+                spectral processing is highly accurate, the time-domain diffusion could be further increased to blend
+                both layers together in a more musical manner.
+            </p>
+
+            <div class="audio-example">
+                <span class="audio-label">Steady State C3 Tone:</span>
+                <div class="audio-grid">
+                    <div class="audio-item">
+                        <span class="audio-label">ValhallaShimmer:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/VShimmer_C3.wav"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Model D:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/MyShimmer_C3.wav"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="audio-example">
+                <span class="audio-label">Musical Context (Saxophone):</span>
+                <div class="audio-grid">
+                    <div class="audio-item">
+                        <span class="audio-label">Reference Shimmer:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/LDM_saxVShimmer.mp3"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Model D Shimmer:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/LDM_saxMyShimmer.mp3"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>4.4. Sub-octave Generation</h3>
+            <p>
+                Figure 16 compares the dry saxophone input (top) with the -12 semitone reverberant output (bottom).
+            </p>
+            <figure>
+                <img src="audio/results/Figure17_SubOctave.png" alt="Sub-octave analysis">
+                <figcaption>Figure 16: Sub-octave generation spectrogram.</figcaption>
+            </figure>
+            <p>
+                The primary energy in the input resides in the C3-C4 octave. In the output, a new and dense layer of
+                energy appears clearly in the C2-C3 octave, confirming the sub-harmonic generation.
+                This yields for a subjectively pleasing musical effect. Perceptually the added doubling voice is
+                reminiscent of a bowed upright bass. The generated sub-harmonics overlap and sustain to fill the
+                spectral gaps below the melody in an enriching and complementary manner to the closing saxophone line.
+            </p>
+
+            <div class="audio-example">
+                <span class="audio-label">Sub-octave Examples:</span>
+                <div class="audio-grid">
+                    <div class="audio-item">
+                        <span class="audio-label">Sax + Sub-octave Double:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/MyShimmer_sax_UB_Double.wav"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Drums + Shimmer Thicken:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/Drums_MyShimmer.mp3"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>4.5. Timbral Discrepancy (Model C vs UshuaiaVerb)</h3>
+            <figure>
+                <img src="audio/results/Figure18_Bass_Comparison.png" alt="Spectral Balance Comparison">
+                <figcaption>Figure 17: Spectral Balance (Model C vs UshuaiaVerb).</figcaption>
+            </figure>
+            <p>
+                Finally, figure 17 investigates the timbral difference between the Faust implementation (Blue) and my
+                original C++ (early 2025) open-source plugin “UshuaiaVerb” [23] (Red). A clear discrepancy
+                is visible in the low-mid frequency range (100Hz-300Hz). The plug-in retains significantly
+                more energy in this region, whereas the Faust implementation exhibits a dropout
+                loop. As presented in Figure 18, the original UshuaiaVerb algorithm [23] utilised specific “SubTight”
+                and “SubBoost” stages to dynamically saturate low frequencies, creating a harmonic density inspired
+                by the Bricasti M7 digital reverberator that the simple linear EQ in the Faust implementation cannot
+                replicate.
+            </p>
+            <figure>
+                <img src="latex_diagrams/ushuaiaVerb_BD.png" alt="UshuaiaVerb block diagram" style="max-width: 700px;">
+                <figcaption>Figure 18: High Level Block Diagram of the UshuaiaVerb Architecture. Based on the work of
+                    Chris Johnson.</figcaption>
+            </figure>
+
+            <div class="audio-example">
+                <span class="audio-label">Low-mid energy comparison:</span>
+                <div class="audio-grid">
+                    <div class="audio-item">
+                        <span class="audio-label">Prototype (UshuaiaVerb):</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/ushuaia_bass.wav"></audio>
+                        </div>
+                    </div>
+                    <div class="audio-item">
+                        <span class="audio-label">Faust Implementation:</span>
+                        <div class="audio-player">
+                            <audio controls src="audio/results/cascaded_bass.wav"></audio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="musical-application" class="fade-in-section">
+            <h2>5. Musical Application</h2>
+
+            <h3>Historical Reconstruction</h3>
+            <p>
+                To evaluate the algorithm in a production context, the Cascaded Model was applied to my own recording
+                and transcription of a Kyrie from the 14th century. The goal was to simulate the acoustic properties of
+                a stone space, characterising the reverberation not merely as an effect, but as a "fourth instrument".
+            </p>
+
+            <div class="audio-example">
+                <span class="audio-label">Sound Example 6: Excerpt from 'Kyrie' - Cascaded model in Cathedral
+                    Mode</span>
+                <div class="audio-player">
+                    <audio controls src="audio/results/Kyrie_performance_Cascaded.mp3"></audio>
+                </div>
+                <p class="caption">
+                    Credits: Luisa Schuster (Soprano), Alexander Frazer (Counter Tenor), Facundo Franchino
+                    (Transcription,
+                    Tenor)
+                </p>
+            </div>
+        </section>
+
+        <section id="future-work" class="fade-in-section">
+            <h2>6. Future Work</h2>
+
+            <h3>Restoring Spectral Weight from UshuaiaVerb in the CSDN Faust Implementation</h3>
+            <p>
+                To restore the original weight and colouration from the C++ implementation, future work must replace
+                the current shelving filters with a direct port of the non-linear waveshaping logic used in UshuaiaVerb.
+            </p>
+
+            <h3>Backwards Reverb and More Diffusion for Shimmer</h3>
+            <p>
+                An additional ValhallaShimmer feature I found interesting was in the diffusion parameter. By setting it
+                to
+                0.618, you obtain a “backwards reverb” effect which yields fascinating
+                textures. Also, I’d explore higher diffusion to control initial echo density and potentially
+                create a more musical blend between both layers.
+            </p>
+
+
+        </section>
+
+
+        <section id="conclusion" class="fade-in-section">
+            <h2>7. Conclusion</h2>
+            <p>
+                This project moved beyond standard room simulation to explore new Klangfarbe through non-linear
+                reverberation. The choice of Faust proved uniquely advantageous, offering
+                rapid iteration since the code mirrors signal-flow structure, and the ability to audition and deploy
+                algorithms quickly.
+            </p>
+            <p>
+                In conclusion, this article highlights a workflow for emulating and designing new acoustic
+                spaces in a
+                manner that is both artistically and scientifically informed. Thanks to the real-time
+                portability of the
+                architecture, these theoretical models are not confined to the laboratory, but are immediately
+                available
+                for practical use in professional production environments.
+            </p>
+        </section>
+
+        <section id="acknowledgements" class="fade-in-section">
+            <h2>Acknowledgements</h2>
+            <p>
+                All diagrams, sound examples, code produced by the author unless noted.
+            </p>
+            <p>
+                I want to thank Gloria Dal Santo and Orchisama Das for providing me with
+                a full scholarship to the VAIA Workshop hosted at CCRMA last summer,
+                which significantly informed this article.
+            </p>
+        </section>
+
+        <section id="references" class="fade-in-section">
+            <h2>References</h2>
+            <ol class="references">
+                <li class="reference-item" value="1">
+                    <span class="reference-main">M. R. Schroeder, “Improved quasi-stereophony and ‘colorless’ artificial
+                        reverberation,” J. Acoust. Soc. Am., vol. 33, no. 8, pp. 1061–1064, 1961.</span>
+                </li>
+                <li class="reference-item" value="2">
+                    <span class="reference-main">M. R. Schroeder, “Natural sounding artificial reverberation,” J. Audio
+                        Eng. Soc., vol. 10, no. 3, pp. 219–223, Jul. 1962.</span>
+                </li>
+                <li class="reference-item" value="3">
+                    <span class="reference-main">M. R. Schroeder, “Digital simulation of sound transmission in
+                        reverberant spaces,” J. Acoust. Soc. Am., vol. 47, no. 2A, pp. 424–431, Feb. 1970.</span>
+                </li>
+                <li class="reference-item" value="4">
+                    <span class="reference-main">J. A. Moorer, About This Reverberation Business, Rapport IRCAM 17/78,
+                        IRCAM, Paris, France, 1978.</span>
+                </li>
+                <li class="reference-item" value="5">
+                    <span class="reference-main">J. Stautner and M. Puckette, “Designing multi-channel reverberators,”
+                        Comput. Music J., vol. 6, no. 1, pp. 52–65, 1982.</span>
+                </li>
+                <li class="reference-item" value="6">
+                    <span class="reference-main">S. J. Schlecht and E. A. P. Habets, “Feedback delay networks: Echo
+                        density and mixing time,” IEEE/ACM Trans. Audio Speech Lang. Process., vol. 25, no. 2, pp.
+                        374–383, 2017.</span>
+                </li>
+                <li class="reference-item" value="7">
+                    <span class="reference-main">S. J. Schlecht and E. A. P. Habets, “Scattering in feedback delay
+                        networks,” IEEE/ACM Trans. Audio Speech Lang. Process., vol. 28, pp. 2126–2138, 2020.</span>
+                </li>
+                <li class="reference-item" value="8">
+                    <span class="reference-main">V. Välimäki, J. D. Parker, L. Savioja, J. O. Smith, and J. S. Abel,
+                        “Fifty years of artificial reverberation,” IEEE Trans. Audio Speech Lang. Process., vol. 20, no.
+                        5, pp. 1421–1448, 2012.</span>
+                </li>
+                <li class="reference-item" value="9">
+                    <span class="reference-main">S. J. Schlecht, “FDNTB: The feedback delay network toolbox,” in Proc.
+                        23rd Int. Conf. Digital Audio Effects (DAFx-20), Vienna, Austria, Sep. 2020.</span>
+                </li>
+                <li class="reference-item" value="10">
+                    <span class="reference-main">S. Costello, “How the technology of artificial reverberation shapes
+                        musical aesthetics (a.k.a. 1000 Years of Reverbs),” AES Pacific Northwest Section Meeting, Jun.
+                        2015. [Online]</span>
+                </li>
+                <li class="reference-item" value="11">
+                    <span class="reference-main">A. V. Oppenheim and R. W. Schafer, Digital Signal Processing. Englewood
+                        Cliffs, NJ, USA: Prentice-Hall, 1975.</span>
+                </li>
+                <li class="reference-item" value="12">
+                    <span class="reference-main">W. C. Sabine, “Reverberation,” in Acoustics: Historical and
+                        Philosophical Development, R. B. Lindsay, Ed. Stroudsburg, PA, USA: Dowden, Hutchinson, and
+                        Ross, 1972.</span>
+                </li>
+                <li class="reference-item" value="13">
+                    <span class="reference-main">D. T. Murphy, D. M. Howard, and A. M. Tyrrell, “Multi-channel
+                        reverberation for computer music applications,”, 1998.</span>
+                </li>
+                <li class="reference-item" value="14">
+                    <span class="reference-main">M. A. Gerzon, “Synthetic stereo reverberation (Part 1),” Studio Sound,
+                        vol. 13, pp. 632–635, Dec. 1971.</span>
+                </li>
+                <li class="reference-item" value="15">
+                    <span class="reference-main">M. A. Gerzon, “Synthetic stereo reverberation (Part 2),” Studio Sound,
+                        vol. 14, pp. 24–28, Jan. 1972.</span>
+                </li>
+                <li class="reference-item" value="16">
+                    <span class="reference-main">J. Dattorro, “Effect design, Part 1: Reverberator and other filters,”
+                        J. Audio Eng. Soc., vol. 45, no. 9, pp. 660–684, Sep. 1997.</span>
+                </li>
+                <li class="reference-item" value="17">
+                    <span class="reference-main">J.-M. Jot and A. Chaigne, “Digital delay networks for designing
+                        artificial reverberators,” in Proc. 90th AES Convention, Paris, France, Feb. 1991, Paper
+                        3030.</span>
+                </li>
+                <li class="reference-item" value="18">
+                    <span class="reference-main">M. R. Schroeder, “Computer models for concert hall acoustics,” Am. J.
+                        Phys., vol. 41, no. 4, pp. 461–471, Apr. 1973.</span>
+                </li>
+                <li class="reference-item" value="19">
+                    <span class="reference-main">J. O. Smith III, “Artificial reverberation,” in Physical Audio Signal
+                        Processing, online book, CCRMA, Stanford University. [Online]. Available: <a
+                            href="https://ccrma.stanford.edu/~jos/pasp/Artificial_Reverberation.html">https://ccrma.stanford.edu/~jos/pasp/Artificial_Reverberation.html</a>.
+                    </span>
+                </li>
+                <li class="reference-item" value="20">
+                    <span class="reference-main">J. O. Smith III, “FDN reverberators in Faust,” in Physical Audio Signal
+                        Processing, online book, CCRMA, Stanford University. [Online]. Available: <a
+                            href="https://ccrma.stanford.edu/~jos/pasp/FDN_Reverberators_Faust.html">https://ccrma.stanford.edu/~jos/pasp/FDN_Reverberators_Faust.html</a>.
+                    </span>
+                </li>
+                <li class="reference-item" value="21">
+                    <span class="reference-main">D. Griesinger, “Practical processors and programs for digital
+                        reverberation,” Lexicon, Inc., Waltham, MA, USA, Tech. Rep., Mar. 21, 1989. [Online]. Available:
+                        <a
+                            href="https://www.davidgriesinger.com/prctpro.pdf">https://www.davidgriesinger.com/prctpro.pdf</a>.</span>
+                </li>
+                <li class="reference-item" value="22">
+                    <span class="reference-main">Y. Orlarey, D. Fober, and S. Letz, “FAUST: An efficient functional
+                        approach to DSP programming,” in New Computational Paradigms for Computer Music, G. Assayag and
+                        A. Gerzso, Eds. Paris, France: IRCAM/Delatour, 2009.</span>
+                </li>
+
+                <li class="reference-item" value="23">
+                    <span class="reference-main">F. Franchino, “UshuaiaVerb: A flagship all-purpose reverb inspired by
+                        the
+                        great Bricasti M7, among others. (C++),” GitHub repository, 2025.</span>
+                </li>
+                <li class="reference-item" value="24">
+                    <span class="reference-main">GRAME-CNCM, “Faust (Functional Audio Stream),” <a
+                            href="https://faust.grame.fr/">https://faust.grame.fr/</a></span>
+                </li>
+            </ol>
+        </section>
+
+        <p id="final-word-count"
+            style="font-family: var(--font-sans); font-weight: 600; text-align: right; margin-top: 4rem; border-top: 1px solid var(--colour-border); padding-top: 1rem;">
+        </p>
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="mathjax/tex-chtml.js"></script>
+    <!-- End MathJax Configuration -->
+
+    <!-- Prism.js for syntax highlighting (Local for offline access) -->
+    <script src="lib/prism/prism.min.js"></script>
+    <script src="lib/prism/prism-clike.min.js"></script>
+    <script src="lib/prism/prism-javascript.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Theory: Introduction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../article-assets/style.css">
+    <link href="../../article-assets/lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#information">The Concept of Information</a></li>
+                <li><a href="#entropy">Entropy</a></li>
+                <li><a href="#applications">Applications</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                Information Theory
+                <span class="subtitle">Introduction</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+        </header>
+
+        <section id="introduction" class="fade-in-section">
+            <h2>Introduction</h2>
+            <p>
+                Information theory, developed by Claude Shannon in 1948, provides the mathematical foundation for
+                understanding how information can be measured, stored, and transmitted efficiently.
+            </p>
+        </section>
+
+        <section id="information" class="fade-in-section">
+            <h2>The Concept of Information</h2>
+            <p>
+                Information can be quantified mathematically. The <strong>information content</strong> of an event
+                with probability $p$ is defined as:
+            </p>
+            <p>$$I(x) = -\log_2(p(x)) \text{ bits}$$</p>
+            <p>For example, if we flip a fair coin:</p>
+            <ul>
+                <li>Probability of heads: $p = 0.5$</li>
+                <li>Information content: $I = -\log_2(0.5) = 1$ bit</li>
+            </ul>
+        </section>
+
+        <section id="entropy" class="fade-in-section">
+            <h2>Entropy</h2>
+            <p>
+                The <strong>entropy</strong> of a discrete random variable $X$ represents the average information
+                content:
+            </p>
+            <p>$$H(X) = -\sum_{i=1}^{n} p(x_i) \log_2 p(x_i)$$</p>
+            <p>where $p(x_i)$ is the probability of outcome $x_i$.</p>
+
+            <h3>Properties of Entropy</h3>
+            <ol>
+                <li>$H(X) \geq 0$ (entropy is always non-negative)</li>
+                <li>$H(X)$ is maximum when all outcomes are equally likely</li>
+                <li>$H(X) = 0$ when one outcome has probability 1</li>
+            </ol>
+        </section>
+
+        <section id="applications" class="fade-in-section">
+            <h2>Applications in Communication Systems</h2>
+            <p>Information theory provides fundamental limits for:</p>
+            <ul>
+                <li><strong>Source coding:</strong> How efficiently can we compress data?</li>
+                <li><strong>Channel coding:</strong> How reliably can we transmit over noisy channels?</li>
+                <li><strong>Channel capacity:</strong> What's the maximum rate of reliable communication?</li>
+            </ul>
+            <p>We'll explore each of these concepts in detail in the following articles.</p>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../article-assets/mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../../article-assets/lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../../article-assets/app.js"></script>
+</body>
+
+</html>

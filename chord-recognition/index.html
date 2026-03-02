@@ -1,0 +1,120 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction: Template-based Chord Recognition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../article-assets/style.css">
+    <link href="../article-assets/lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#two-stage-approach">Two-Stage Approach</a></li>
+                <li><a href="#improving-accuracy">Improving Accuracy</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                Template-based Chord Recognition
+                <span class="subtitle">Introduction</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+        </header>
+
+        <section id="introduction" class="fade-in-section">
+            <h2>Introduction</h2>
+            <p>
+                Assuming a piece of music is given in the form of an audio recording, an interesting problem to solve in
+                hopes of analysing harmony is that of automatic chord recognition. To achieve this, one should split up
+                the recording into segments and find an efficient and reliable method to assign a chord label to each
+                generated segment.
+            </p>
+        </section>
+
+        <section id="two-stage-approach" class="fade-in-section">
+            <h2>Two-Stage Approach</h2>
+            <p>
+                Such systems are typically two-staged:
+            </p>
+            <p>
+                <strong>First</strong>, we must cut the recording into frames, and each frame thus be transformed into a
+                feature vector. As most ACR systems, we'll bank on chroma-based audio features, which provide a compact,
+                octave-invariant representation of the harmonic content by aggregating energy into twelve pitch classes.
+            </p>
+            <p>
+                <strong>Secondly</strong>, we utilise pattern matching to compare each feature vector against a
+                dictionary
+                of predefined chord templates (hence template-based ACR). These are prototypical vectors representing,
+                for
+                example, 24 major and minor triads. By calculating a similarity measure for each template, we assign the
+                chord that maximises this similarity score for the given frame/segment.
+            </p>
+        </section>
+
+        <section id="improving-accuracy" class="fade-in-section">
+            <h2>Improving Accuracy</h2>
+            <p>
+                To improve recognition accuracy, we may apply processing techniques either to the feature vectors
+                (known as prefiltering) or to the classification output (postfiltering).
+            </p>
+
+            <figure>
+                <img src="../template-based-chordrec.png" alt="Template-based Chord Recognition System Architecture">
+                <figcaption>Figure 1: Template-based Chord Recognition System Architecture.</figcaption>
+            </figure>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../article-assets/mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../article-assets/lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../article-assets/app.js"></script>
+</body>
+
+</html>
