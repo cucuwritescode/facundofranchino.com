@@ -244,10 +244,7 @@ function Desktop() {
             <S.textModal>
               <h1>About</h1>
               <p>
-                I'm Facundo, a programmer, multi-instrumentalist and composer from Buenos Aires, currently reading Electronic Engineering at the University of York and writing my final-year thesis.
-              </p>
-              <p>
-                My work focuses on signal processing, real-time systems, and music information retrieval.
+                I'm Facundo, a programmer, multi-instrumentalist, and composer from Buenos Aires. I'm an incoming MASc Fellow at @MIT, where my work focuses on signal processing, real-time systems, and music information retrieval.
               </p>
               <br />
               <p style={{ fontStyle: 'italic', textAlign: 'center' }}>
