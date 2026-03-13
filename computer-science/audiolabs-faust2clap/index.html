@@ -1,0 +1,99 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>faust2clap Presentation at AudioLabs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../article-assets/style.css">
+    <link href="../../article-assets/lib/prism/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+
+        <!-- Reading Progress Bar -->
+        <div class="progress-bar"></div>
+
+        <!-- Floating Table of Contents -->
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#announcement">Announcement</a></li>
+                <li><a href="#materials">Materials</a></li>
+            </ul>
+        </nav>
+
+        <header class="report-header">
+            <h1>
+                faust2clap Presentation
+                <span class="subtitle">at AudioLabs</span>
+            </h1>
+            <p class="author">by Facundo Franchino</p>
+            <p class="meta">York, UK</p>
+        </header>
+
+        <section id="announcement" class="fade-in-section">
+            <h2>Announcement</h2>
+            <p>
+                I presented faust2clap at AudioLabs. Here are the materials from the presentation for anyone
+                interested in the project.
+            </p>
+        </section>
+
+        <section id="materials" class="fade-in-section">
+            <h2>Materials</h2>
+
+            <h3>Presentation</h3>
+            <p>
+                <strong><a href="/faust2clap-audiolabs-presentation.pdf">Download the presentation (PDF)</a></strong>
+            </p>
+
+            <h3>Poster</h3>
+            <p>
+                <strong><a href="/faust2clap_ADC_Poster.pdf">Download the ADC Bristol 2025 poster (PDF)</a></strong>
+            </p>
+        </section>
+
+    </main>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['$', '$']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="../../article-assets/mathjax/tex-chtml.js"></script>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="../../article-assets/lib/prism/prism.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../../article-assets/app.js"></script>
+</body>
+
+</html>

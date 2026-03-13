@@ -1,0 +1,316 @@
+<!-- created by facundo franchino -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Facundo Franchino</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@100..900&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script>
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded-mode');
+        }
+    </script>
+
+    <main>
+
+        <header class="portfolio-header">
+            <h1>Portfolio</h1>
+            <p class="subtitle">A selection of recent work in computer science, electronics, signal processing, and
+                musical audio.</p>
+        </header>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="ml">Machine Learning</button>
+            <button class="filter-btn" data-filter="dsp">Signal Processing</button>
+            <button class="filter-btn" data-filter="embedded">Embedded</button>
+            <button class="filter-btn" data-filter="compiler">Compilers</button>
+            <button class="filter-btn" data-filter="acoustics">Acoustics</button>
+        </div>
+
+        <div class="projects-grid">
+
+            <!-- faust2clap -->
+            <article class="project-card" data-tags="compiler dsp">
+                <div class="project-media">
+                    <video src="media/faust2clap-demo.mp4" muted autoplay loop playsinline></video>
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Programming Languages • Compilers • Signal Processing • GSoC •
+                        GRAME</span>
+                    <h2>faust2clap</h2>
+                    <p>
+                        Developed an officially supported Faust compiler backend for the CLAP (CLever Audio Plugin)
+                        standard,
+                        merged into Faust's latest release (2.81.10) under the supervision of Jatin Chowdhury (MIT) and
+                        Stéphane Letz (GRAME/INRIA).
+                    </p>
+                    <p>
+                        Designed and implemented the faust2clap compiler tool, generating CLAP-compliant real-time
+                        plugin binaries
+                        and enabling dynamic hot-reloading of DSP code directly in DAWs.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://github.com/cucuwritescode/faust2clap/tree/fixes" target="_blank"
+                            rel="noopener noreferrer" class="link-btn github">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </a>
+                        <a href="/faust2clap_ADC_Poster.pdf" target="_blank" class="link-btn">
+                            📄 ADC Poster
+                        </a>
+                        <a href="/faust2clap-audiolabs-presentation.pdf" target="_blank" class="link-btn">
+                            🎤 AudioLabs
+                        </a>
+                        <a href="/faust2clap-paper.pdf" target="_blank" class="link-btn">
+                            📝 JOSS Paper
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- amadeus -->
+            <article class="project-card amadeus-card" data-tags="ml dsp">
+                <div class="project-media dual-media">
+                    <img src="media/amadeus.png" alt="amadeus iOS app screenshot">
+                    <video src="media/amadeus-demo.mp4" muted autoplay loop playsinline></video>
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">iOS Development • Audio ML • Chord Recognition</span>
+                    <h2>Amadeus</h2>
+                    <p class="project-subtitle">Automatic Chord Recognition in iOS</p>
+                    <p>
+                        A real-time chord-analysis and music-theory assistant for iOS. Load or record audio,
+                        extract chords and key using a custom machine-learning pipeline, and explore results
+                        through an intuitive interactive interface.
+                    </p>
+                    <p>
+                        Built end-to-end using Spotify's Basic Pitch model, plus a custom Python backend with robust
+                        pre-filtering
+                        and post-processing pipeline (mono conversion, normalisation, resampling, onset detection),
+                        chord detection, key estimation,
+                        and smoothing algorithms.
+                        Full SwiftUI app with waveform-synchronised playback, recording, transposition, and interactive
+                        theory library.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://github.com/cucuwritescode/amadeus" target="_blank" rel="noopener noreferrer"
+                            class="link-btn github">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </a>
+                        <a href="https://amadeus-chordzart.readthedocs.io" target="_blank" rel="noopener noreferrer"
+                            class="link-btn">
+                            📚 Documentation
+                        </a>
+                        <a href="/amadeus-report.pdf" target="_blank" class="link-btn">
+                            📄 Report
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- DeepCassette -->
+            <article class="project-card" data-tags="dsp ml">
+                <div class="project-media">
+                    <img src="media/deepcassette.png" alt="Tascam Portastudio 424 MkII">
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Virtual Analogue Modelling • Machine Learning</span>
+                    <h2>DeepCassette</h2>
+                    <p class="project-subtitle">Neural Modelling of a Cassette Multitrack Recorder</p>
+                    <p>
+                        Neural modelling of cassette tape recorders using a grey-box approach,
+                        specifically trained on the Tascam Portastudio 424 MkII.
+                    </p>
+                    <p>
+                        Built the first dataset of cassette tape recorder input/output pairs,
+                        collected and used in the research project, working towards a DAFx paper submission.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://github.com/cucuwritescode/deep-cassette" target="_blank"
+                            rel="noopener noreferrer" class="link-btn github">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ushuaiaVerb -->
+            <article class="project-card reverse" data-tags="dsp">
+                <div class="project-media">
+                    <img src="media/ushuaiaverb.png" alt="ushuaiaVerb plugin in Logic Pro">
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Artificial Reverberation • Open Source Plug-ins</span>
+                    <h2>ushuaiaVerb</h2>
+                    <p>
+                        A flagship all-purpose open source reverb inspired by the Bricasti M7 digital reverb,
+                        implemented in C++ and JUCE.
+                    </p>
+                    <p>
+                        Designed using cascaded delay networks with structured mixing via a 5×5 Householder matrix.
+                        The architecture prioritises high echo density, efficient diffusion, and stereo decorrelation
+                        through asymmetric delay paths.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://github.com/gaucho-dsp/ushuaiaVerb" target="_blank" rel="noopener noreferrer"
+                            class="link-btn github">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Deep Learning ACR -->
+            <article class="project-card" data-tags="ml dsp">
+                <div class="project-media">
+                    <img src="media/acr-bede.png" alt="ACR with Bede supercomputer diagram">
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Deep Learning • Chord Recognition • High Performance Computing</span>
+                    <h2>Deep Learning Models for Automatic Chord Recognition</h2>
+                    <p class="project-subtitle">with the Bede Supercomputer</p>
+                    <p>
+                        Research into deep learning approaches for automatic chord recognition and the common/rare
+                        chords imbalance problem, using the Bede supercomputer for large-scale training and
+                        evaluation.
+                    </p>
+                    <p>
+                        Among only three awarded studentships across all departments at the University of York.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://github.com/cucuwritescode/ChordRecognition" target="_blank"
+                            rel="noopener noreferrer" class="link-btn github">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Emulating Space -->
+            <article class="project-card reverse" data-tags="dsp">
+                <div class="project-media">
+                    <img src="media/emulating-space.png" alt="Reverb algorithm diagrams">
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Artificial Reverberation • Faust • Digital Signal Processing</span>
+                    <h2>Emulating Space and Designing New Ones</h2>
+                    <p class="project-subtitle">From Schroeder to Eno-Lanois</p>
+                    <p>
+                        Research and implementation of artificial reverberation algorithms in the Faust programming
+                        language,
+                        from classic Schroeder designs to Feedback Delay Networks and shimmer effects.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://facundofranchino.com/#reader/reverberation/emulating-space" target="_blank"
+                            rel="noopener noreferrer" class="link-btn article">
+                            📖 Read Article
+                        </a>
+                        <a href="https://github.com/cucuwritescode/MASMS" target="_blank" rel="noopener noreferrer"
+                            class="link-btn github">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Pure Harmony -->
+            <article class="project-card" data-tags="embedded dsp">
+                <div class="project-media">
+                    <img src="media/pure-harmony.jpg" alt="Pure Harmony hardware prototype">
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Embedded Programming • Real-time DSP</span>
+                    <h2>Pure Harmony</h2>
+                    <p>
+                        Chosen best of my cohort and presented to the IET in April 2025.
+                        Led team, conceptualised, designed, and implemented the entire project from initial idea to
+                        functional prototype.
+                    </p>
+                    <p>
+                        Developed a custom low-level MIDI driver and harmonisation algorithm based on Arvo Pärt's
+                        'Tintinnabuli'
+                        composition system for the STM32F4 microcontroller. Engineered the full software and DSP
+                        pipeline,
+                        including a custom reverb algorithm and dynamic filtering.
+                    </p>
+                    <div class="project-links">
+                        <!-- Links to be added -->
+                    </div>
+                </div>
+            </article>
+
+            <!-- Auralisation -->
+            <article class="project-card reverse" data-tags="acoustics">
+                <div class="project-media">
+                    <img src="media/auralisation.jpg" alt="Recording session in a tunnel">
+                </div>
+                <div class="project-content">
+                    <span class="project-tag">Acoustics • RIR • Reverberation</span>
+                    <h2>Acoustic Analysis and Auralisation of a Steel Tongue Drum in a Tunnel</h2>
+                    <p>
+                        In-situ acoustic analysis and impulse response capture of a concrete tunnel.
+                        Created realistic auralisation of an anechoic steel tongue drum performance.
+                    </p>
+                    <p>
+                        Combined room acoustic measurements with convolution techniques to virtually place
+                        the instrument within the tunnel's unique reverberant characteristics.
+                    </p>
+                    <div class="project-links">
+                        <a href="https://github.com/cucuwritescode/STDAcousticAnalysis" target="_blank"
+                            rel="noopener noreferrer" class="link-btn github">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            GitHub
+                        </a>
+                        <a href="/auralisation-paper.pdf" target="_blank" class="link-btn">
+                            📄 Paper
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
